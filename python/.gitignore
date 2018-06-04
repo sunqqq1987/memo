@@ -1,0 +1,7 @@
+PortScanner.egg-info
+build
+dist
+*.pyc
+.idea
+tmp
+geckodriver.log

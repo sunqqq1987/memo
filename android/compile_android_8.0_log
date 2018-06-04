@@ -1,0 +1,101 @@
+[ 90% 18761/20725] Target userdata fs image: out/target/product/generic_arm64/userdata.img
+Running:  mkuserimg.sh out/target/product/generic_arm64/data out/target/product/generic_arm64/userdata.img ext4 data 576716800 -D out/t                             arget/product/generic_arm64/system -L data out/target/product/generic_arm64/obj/ETC/file_contexts.bin_intermediates/file_contexts.bin
+make_ext4fs -T -1 -S out/target/product/generic_arm64/obj/ETC/file_contexts.bin_intermediates/file_contexts.bin -L data -l 576716800 -a                              data out/target/product/generic_arm64/userdata.img out/target/product/generic_arm64/data out/target/product/generic_arm64/system
+Creating filesystem with parameters:
+    Size: 576716800
+    Block size: 4096
+    Blocks per group: 32768
+    Inodes per group: 7040
+    Inode size: 256
+    Journal blocks: 2200
+    Label: data
+    Blocks: 140800
+    Block groups: 5
+    Reserved block group size: 39
+Created filesystem with 91/35200 inodes and 10947/140800 blocks
+out/target/product/generic_arm64/userdata.img maxsize=588791808 blocksize=2112 total=576716800 reserve=5947392
+[ 93% 19283/20725] //frameworks/av/media/libstagefright/codecs/mpe...2dec header-abi-diff libstagefright_soft_mpeg2dec.so.abidiff [arm
+******************************************************
+VNDK Abi broken: Please check compatiblity report at : out/soong/.intermediates/frameworks/av/media/libstagefright/codecs/mpeg2dec/libs                             tagefright_soft_mpeg2dec/android_arm_armv7-a-neon_cortex-a15_shared_core/libstagefright_soft_mpeg2dec.so.abidiff
+*****************************************************
+[ 99% 20713/20725] build out/target/product/generic_arm64/obj/NOTICE.xml
+Combining NOTICE files into text
+Combining NOTICE files into XML
+[ 99% 20716/20725] build out/target/product/generic_arm64/obj/NOTICE_VENDOR.xml
+Combining NOTICE files into text
+Combining NOTICE files into XML
+[ 99% 20720/20725] Target vendor fs image: out/target/product/generic_arm64/vendor.img
+Running:  mkuserimg.sh out/target/product/generic_arm64/vendor out/target/product/generic_arm64/vendor.img ext4 vendor 100000000 -D out                             /target/product/generic_arm64/system -L vendor out/target/product/generic_arm64/obj/ETC/file_contexts.bin_intermediates/file_contexts.b                             in
+make_ext4fs -T -1 -S out/target/product/generic_arm64/obj/ETC/file_contexts.bin_intermediates/file_contexts.bin -L vendor -l 100000000                              -a vendor out/target/product/generic_arm64/vendor.img out/target/product/generic_arm64/vendor out/target/product/generic_arm64/system
+Creating filesystem with parameters:
+    Size: 99999744
+    Block size: 4096
+    Blocks per group: 32768
+    Inodes per group: 6112
+    Inode size: 256
+    Journal blocks: 1024
+    Label: vendor
+    Blocks: 24414
+    Block groups: 1
+    Reserved block group size: 7
+Created filesystem with 373/6112 inodes and 4950/24414 blocks
+out/target/product/generic_arm64/vendor.img maxsize=102091968 blocksize=2112 total=99999744 reserve=1032768
+[ 99% 20722/20725] Target system fs image: out/target/product/generic_arm64/obj/PACKAGING/systemimage_intermediates/system.img
+Running:  mkuserimg.sh out/target/product/generic_arm64/system out/target/product/generic_arm64/obj/PACKAGING/systemimage_intermediates                             /system.img ext4 system 2684354560 -D out/target/product/generic_arm64/system -L system out/target/product/generic_arm64/obj/ETC/file_c                             ontexts.bin_intermediates/file_contexts.bin
+make_ext4fs -T -1 -S out/target/product/generic_arm64/obj/ETC/file_contexts.bin_intermediates/file_contexts.bin -L system -l 2684354560                              -a system out/target/product/generic_arm64/obj/PACKAGING/systemimage_intermediates/system.img out/target/product/generic_arm64/system                              out/target/product/generic_arm64/system
+Creating filesystem with parameters:
+    Size: 2684354560
+    Block size: 4096
+    Blocks per group: 32768
+    Inodes per group: 8192
+    Inode size: 256
+    Journal blocks: 10240
+    Label: system
+    Blocks: 655360
+    Block groups: 20
+    Reserved block group size: 159
+Created filesystem with 2637/163840 inodes and 268102/655360 blocks
+[ 99% 20723/20725] Create vendor-qemu.img
+1+0 records in
+2048+0 records out
+1048576 bytes (1.0 MB, 1.0 MiB) copied, 0.144123 s, 7.3 MB/s
+95+1 records in
+96+0 records out
+100663296 bytes (101 MB, 96 MiB) copied, 0.173876 s, 579 MB/s
+1048576+0 records in
+1048576+0 records out
+1048576 bytes (1.0 MB, 1.0 MiB) copied, 1.32275 s, 793 kB/s
+Creating new GPT entries.
+Warning: The kernel is still using the old partition table.
+The new table will be used at the next reboot.
+The operation has completed successfully.
+Setting name!
+partNum is 0
+REALLY setting name!
+Warning: The kernel is still using the old partition table.
+The new table will be used at the next reboot.
+The operation has completed successfully.
+[ 99% 20724/20725] Install system fs image: out/target/product/generic_arm64/system.img
+out/target/product/generic_arm64/system.img+ maxsize=2740556544 blocksize=2112 total=2684354560 reserve=27684096
+[100% 20725/20725] Create system-qemu.img
+1+0 records in
+2048+0 records out
+1048576 bytes (1.0 MB, 1.0 MiB) copied, 0.0527474 s, 19.9 MB/s
+2560+0 records in
+2560+0 records out
+2684354560 bytes (2.7 GB, 2.5 GiB) copied, 19.275 s, 139 MB/s
+1048576+0 records in
+1048576+0 records out
+1048576 bytes (1.0 MB, 1.0 MiB) copied, 1.30465 s, 804 kB/s
+Creating new GPT entries.
+Warning: The kernel is still using the old partition table.
+The new table will be used at the next reboot.
+The operation has completed successfully.
+Setting name!
+partNum is 0
+REALLY setting name!
+Warning: The kernel is still using the old partition table.
+The new table will be used at the next reboot.
+The operation has completed successfully.
+
+#### build completed successfully (02:46:16 (hh:mm:ss)) ####
