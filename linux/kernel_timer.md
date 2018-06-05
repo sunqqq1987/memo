@@ -5,7 +5,8 @@
 	https://blog.csdn.net/droidphone/article/details/8051405
 
 	Linux时间与RTC的关系是：
-	当Linux启动时，从RTC（硬时钟）读取时间和日期的基准值，然后在Kernel运行期间便抛开RTC，以软件的形式维护系统的时间日期，并在适当时机将时间写回RTC Register.
+	当Linux启动时，从RTC（硬时钟）读取时间和日期的基准值，然后在Kernel运行期间便抛开RTC，
+	以软件的形式维护系统的时间日期，并在适当时机将时间写回RTC Register.
 
 	时钟周期（clock cycle）：晶体振荡器在1秒时间内产生的时钟脉冲个数
 	时钟中断：当时钟计数器减到0时就会产生一次中断
@@ -27,6 +28,7 @@
 - 内核定时器: 低精度时钟/高精度时钟
 
 		Linux 2.6.16之前，内核只支持低精度时钟，其工作方式：
+
 		1）系统启动后，会读取时钟源设备(RTC, HPET，PIT…),初始化当前系统时间；
 		2）内核根据HZ(系统定时器频率，节拍率)参数，设置时钟事件设备，启动tick(节拍)中断。
 		HZ表示1秒种产生多少个时钟硬件中断，tick就表示连续两个中断的间隔时间。
@@ -45,14 +47,39 @@
 	
 		新内核对相关的时间硬件设备进行了统一的封装，主要定义了下面两个结构：
 	
-		1）时钟源设备(closk source device)：抽象那些能够提供计时功能的系统硬件，比如 RTC(Real Time Clock)、TSC(Time Stamp Counter)，HPET，ACPI PM-Timer，PIT等。
+		1）时钟源设备(closk source device)： 
+		抽象那些能够提供计时功能的系统硬件，比如 RTC(Real Time Clock)、TSC(Time Stamp Counter)，HPET，ACPI PM-Timer，PIT等。
 		不同时钟源提供的精度不一样，现在大都是支持高精度模式(high-resolution mode)也支持低精度模式(low-resolution mode)。
 		
-		2）时钟事件设备(clock event device)：系统中可以触发 one-shot（单次）或者周期性中断的设备都可以作为时钟事件设备。
+		2）时钟事件设备(clock event device)： 
+		系统中可以触发 one-shot（单次）或者周期性中断的设备都可以作为时钟事件设备。
 	
 		当前内核同时存在新旧timer wheel 和 hrtimer两套timer的实现。
 		在高精度时钟模式下，操作系统内核仍然需要周期性的tick中断，以便刷新内核的一些任务。
 		内核启动后会从低精度模式切换到高精度，hrtimer模拟的tick中断将驱动 传统的低精度定时器系统和内核进程调度。
+
+- 从周期性中断模式 切换到 一次性中断模式
+
+		kernel下timer的中断模式支持2种：周期性和一次性，也就是periodic和oneshot
+
+		对于固定tick（1/HZ）系统的timer使用periodic。
+		但是对于tickless系统，则必须要使用oneshot 模式了，因为每次timer中断间隔不一样长。
+		系统选用NOHZ，也就是tickless系统，不应该使用periodic mode的timer，而应该是oneshot mode的timer。
+
+		那么kernel在哪里进行mode的变换呢？
+
+		1）tick_check_new_device()中: 如果newdev支持CLOCK_EVT_FEAT_ONESHOT，
+		调用tick_oneshot_notify设置set_bit(0, &ts->check_clocks)；
+		2）hrtimer的softirq的处理函数调用tick_check_oneshot_change：检查check_clocks的bit0，
+		如果置位，则会调用tick_nohz_switch_to_nohz()完成timer mode到oneshot的切换以及中断处理函数evt_handler的切换。
+
+		关键代码是 tick_switch_to_oneshot(tick_nohz_handler)：
+		修改当前clockevent的evt_handler为tick_nohz_handler，设置timer的mode为oneshot。
+		
+		在平台clockevent注册时，第一次初始化tick_device，timer默认使用periodic mode，
+		evt_handler是tick_handle_periodic，系统还是固定tick的（1/HZ秒）；
+		但是在timer中断使能，第一次中断处理完成后，timer就切换成了oneshot mode，
+		evt_handler替换为tick_nohz_handler，kernel正式开始了tickless。
 
 - 低精度timer(timer wheel)
 

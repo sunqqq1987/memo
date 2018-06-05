@@ -431,86 +431,105 @@
 
 	参考
 	https://blog.csdn.net/u014089131/article/details/54409900
+	https://www.cnblogs.com/huxiao-tee/p/4660352.html  认真分析mmap：是什么 为什么 怎么用
 	
-	mmap() 是将设备或文件映射到用户进程的虚拟地址空间, 实现用户进程对文件的直接读写，常被应用程序使用。
+	mmap() 是将(文件或设备)的物理地址 映射到用户进程的虚拟地址空间, 使得用户进程可以对文件进行直接读写，常被应用程序使用。
 
-	mmap分为以下2步：
-	1) 在进程的虚拟地址空间中找一个空闲连续的VMA，将它插入到进程的VMA链表中;
-	2) 如果设备驱动程序或文件系统的file_operation定义了mmap,则调用它，
-	以建立VMA虚拟地址空间与（文件或设备的物理地址）之间的映射。(由设备驱动或内核完成)
+	mmap分为以下3步：
+
+	1) 在当前进程的虚拟地址空间中找一个空闲连续的VMA（vm_area_struct），将它插入到进程的VMA链表中;
+	2) 如果设备驱动程序或文件系统的file_operation定义了mmap函数, 则调用它，
+	以建立VMA虚拟地址与（文件或设备的物理地址）之间的映射。(由设备驱动或内核完成)
+
+	其中, 内核mmap函数的原型为：int mmap(struct file *filp, struct vm_area_struct *vma)
 	
-	mmap是用户空间需要直接映射物理地址时调用的系统调用，其内部一般通过remap_pfn_range实现。
+	具体是：
+	(a) 通过fd找到进程的struct file * 指针，进而得到file_operations.mmap, 
+	该内核mmap函数通过虚拟文件系统inode定位到文件的磁盘物理地址;
+	(b) 通过remap_pfn_range函数建立页表，即实现了文件地址？和虚拟地址区域的映射关系
+
+	int remap_pfn_range(struct vm_area_struct *vma, unsigned long addr,
+		    unsigned long pfn, unsigned long size, pgprot_t prot)
 	
+	3) 进程发起对这片映射空间的访问，引发缺页异常，实现文件内容到物理内存的拷贝
+
+
 	mmap的内核实现： https://blog.csdn.net/u014089131/article/details/54574964
 	
 	这个函数优点：
 	1. 只有一次内存拷贝
-	一般读写文件操作open/read/write，因缺页，内核先通过磁盘调页操作将磁盘文件读到内核page cache缓冲区（该cache只能由内核操作），
-	然后再将其拷贝到用户空间的内存区，涉及两次读写操作。
+	一般的读写文件操作open/read/write，因缺页，内核先通过磁盘调页操作 将磁盘文件读到内核的page cache(如果swap空间中没有的话）
+	（注意：内核的page cache只能由内核操作），然后将其拷贝到用户空间的内存区，涉及两次读写操作。
 
-	mmap先会建立用户虚拟地址到磁盘文件的映射(vma.vm_file和.vm_pgoff)；当进程读写文件时，发生缺页中断，内核给用户虚拟内存分配对应的物理内存，
-	再通过FS的磁盘调页操作将磁盘数据读到物理内存上，实现用户空间读取文件数据，整个过程只有一次内存拷贝。
+	而mmap先会建立用户虚拟地址到磁盘文件的映射(vma.vm_file和.vm_pgoff)；当进程读写文件时，发生缺页，
+	内核通过FS的磁盘调页操作 将磁盘数据读到物理内存上，期间会建立该用户虚拟内存与物理内存的映射？，
+	这样用户空间就可以读取文件数据。整个过程只有一次内存拷贝。
 	
 	2. 用于进程间大量数据通信
 	两个进程映射了同一个文件，一个进程操作了文件，另一个文件立即可见，可用于通信：
 
 	以下需要确认？
 
-	两个进程的不同虚拟内存空间，映射到同一个文件； 当一个进程操作文件时，先通过缺页获取物理内存，再通过磁盘调页操作将文件数据读入内存;
-	另一个进程访问文件的时候，发现自己的虚拟内存没有分配对应的物理页面，之后会通过fs的缺页处理查找cache区是否有读入磁盘文件，
+	两个进程的不同虚拟内存空间，映射到同一个文件； 
+	当一个进程操作文件时，先通过缺页获取物理内存，再通过磁盘调页操作将文件数据读入内存;
+	另一个进程访问文件的时候，发现自己的虚拟内存没有分配对应的物理页面，之后会通过fs的缺页处理 查找cache区是否有读入的磁盘文件，
 	有的话建立映射关系，这样两个进程通过共享内存就可以进行通信。
 	
 	3. 文件关闭后，mmap可以继续操作使用，因为在内核中已经通过fd找到了对应的磁盘文件，从而将文件跟vma关联。
 	
-	mmap定义如下：
-	void *mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset);
-	
-	函数说明： 将地址为addr，长度length的文件数据映射到进程空间
-	返回说明：
-	成功执行时，mmap()返回被映射区的指针。失败时，mmap()返回MAP_FAILED[其值为(void *)-1]， error被设为以下的某个值：
-	
-	参数
-	start：用户指定的映射区的开始地址，一般为NULL，由内核确定映射地址
-	length：映射区的长度
-	
-	prot：期望的内存保护标志，不能与文件的打开模式冲突。是以下的某个值，可以通过or运算合理地组合在一起
-	
-	1 PROT_EXEC ：页内容可以被执行
-	2 PROT_READ ：页内容可以被读取
-	3 PROT_WRITE ：页可以被写入
-	4 PROT_NONE ：页不可访问
-	
-	flags：指定映射对象的类型，映射选项和映射页是否可以共享。它的值可以是一个或者多个以下位的组合体
-	
-	1 MAP_FIXED //使用指定的映射起始地址addr. 如果由start和len参数指定的内存区重叠于现存的映射空间，重叠部分将会被丢弃。
-				如果指定的起始地址不可用，操作将会失败。并且起始地址必须落在页的边界上。
-				考虑到可移植性，addr 通常设为 NULL ，不指定 MAP_FIXED。
-	
-	2 MAP_SHARED //与其它所有映射这个对象的进程共享映射空间。对共享区的写入，相当于输出到文件。(??直到msync()或者munmap()被调用，文件实际上不会被更新。)
-	
-	3 MAP_PRIVATE //建立一个写入时拷贝的私有映射。映射内存区域的写入不会影响到原文件。这个标志和以上标志是互斥的，只能使用其中一个。
-	
-	4 MAP_DENYWRITE //这个标志被忽略。
-	5 MAP_EXECUTABLE //同上
-	6 MAP_NORESERVE //不要为这个映射保留交换空间。当交换空间被保留，对映射区修改的可能会得到保证。当交换空间不被保留，同时内存不足，对映射区的修改会引起段违例信号。
-	7 MAP_LOCKED //锁定映射区的页面，从而防止页面被交换出内存。
-	
-	8 MAP_GROWSDOWN //用于堆栈，告诉内核VM系统，映射区可以向下扩展。
-	9 MAP_ANONYMOUS //匿名映射，映射区不与任何文件关联。
-	
-	10 MAP_ANON //MAP_ANONYMOUS的别称，不再被使用。
-	11 MAP_FILE //兼容标志，被忽略。
-	12 MAP_32BIT //将映射区放在进程地址空间的低2GB，MAP_FIXED指定时会被忽略。当前这个标志只在x86-64平台上得到支持。
-	13 MAP_POPULATE //为文件映射通过预读的方式准备好页表。随后对映射区的访问不会被页违例阻塞。
-	14 MAP_NONBLOCK //仅和MAP_POPULATE一起使用时才有意义。不执行预读，只为已存在于内存中的页面建立页表入口。
-	
-	fd：有效的文件描述符。如果MAP_ANONYMOUS被设定，为了兼容问题，其值应为-1
-	
-	offset：被映射对象内容的起点
-	
-	
-	
+- 用户空间mmap的定义
 
+		void *mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset);
+		
+		函数说明： 将地址为addr，长度length的文件数据映射到进程空间
+		返回说明：
+		成功执行时，mmap()返回被映射区的指针。失败时，mmap()返回MAP_FAILED[其值为(void *)-1]， error被设为以下的某个值：
+		
+		参数
+		start：用户指定的映射区的开始地址，一般为NULL，由内核确定映射地址
+		length：映射区的长度
+		
+		prot：期望的内存保护标志，不能与文件的打开模式冲突。是以下的某个值，可以通过or运算合理地组合在一起
+		
+		1 PROT_EXEC ：页内容可以被执行
+		2 PROT_READ ：页内容可以被读取
+		3 PROT_WRITE ：页可以被写入
+		4 PROT_NONE ：页不可访问
+		
+		flags：指定映射对象的类型，映射选项和映射页是否可以共享。它的值可以是一个或者多个以下位的组合体
+		
+		1 MAP_FIXED //使用指定的映射起始地址addr. 如果由start和len参数指定的内存区重叠于现存的映射空间，重叠部分将会被丢弃。
+					如果指定的起始地址不可用，操作将会失败。并且起始地址必须落在页的边界上。
+					考虑到可移植性，addr 通常设为 NULL ，不指定 MAP_FIXED。
+		
+		2 MAP_SHARED //与其它所有映射这个对象的进程共享映射空间。对共享区的写入，相当于输出到文件。
+					(??直到msync()或者munmap()被调用，文件实际上不会被更新。)
+		
+		3 MAP_PRIVATE //建立一个写入时拷贝的私有映射。映射内存区域的写入不会影响到原文件。
+					这个标志和以上标志是互斥的，只能使用其中一个。
+		
+		4 MAP_DENYWRITE //这个标志被忽略。
+		5 MAP_EXECUTABLE //同上
+		6 MAP_NORESERVE //不要为这个映射保留交换空间。当交换空间被保留，对映射区修改的可能会得到保证。
+						当交换空间不被保留，同时内存不足，对映射区的修改会引起段违例信号。
+		7 MAP_LOCKED //锁定映射区的页面，从而防止页面被交换出内存。
+		
+		8 MAP_GROWSDOWN //用于堆栈，告诉内核VM系统，映射区可以向下扩展。
+		9 MAP_ANONYMOUS //匿名映射，映射区不与任何文件关联。
+		
+		10 MAP_ANON //MAP_ANONYMOUS的别称，不再被使用。
+		11 MAP_FILE //兼容标志，被忽略。
+		12 MAP_32BIT //将映射区放在进程地址空间的低2GB，MAP_FIXED指定时会被忽略。当前这个标志只在x86-64平台上得到支持。
+		13 MAP_POPULATE //为文件映射通过预读的方式准备好页表。随后对映射区的访问不会被页违例阻塞。
+		14 MAP_NONBLOCK //仅和MAP_POPULATE一起使用时才有意义。不执行预读，只为已存在于内存中的页面建立页表入口。
+		
+		fd：有效的文件描述符。如果MAP_ANONYMOUS被设定，为了兼容问题，其值应为-1
+		
+		offset：被映射对象内容的起点
+	
+- 使用实例
+
+		https://blog.csdn.net/luckywang1103/article/details/50619251  mmap - 用户空间与内核空间
 
 # 写时拷贝COW(copy on write) #
 
@@ -546,7 +565,8 @@
 	The VM uses this number to compute a watermark[WMARK_MIN] value for each lowmem zone in the system.
 	Each lowmem zone gets a number of reserved free pages based proportionally on its size.
 	Some minimal amount of memory is needed to satisfy PF_MEMALLOC allocations;
-	if you set this to lower than 1024KB, your system will become subtly broken, and prone to deadlock under high loads.
+	if you set this to lower than 1024KB, your system will become subtly broken, 
+	and prone to deadlock under high loads.
 	Setting this too high will OOM your machine instantly.
 	
 	1. 代表系统所保留空闲内存的最低限。
@@ -555,13 +575,16 @@
 	
 	1) watermark[high] > watermark [low] > watermark[min]，各个zone各一套
 
-	2)在系统空闲内存低于 watermark[low]时，开始启动内核线程kswapd进行内存回收（每个zone一个），直到该zone的空闲内存数量达到watermark[high]后停止回收。
-	如果上层申请内存的速度太快，导致空闲内存降至watermark[min]后，内核就会进行direct reclaim（直接回收），即直接在应用程序的进程上下文中进行回收，
+	2)在系统空闲内存低于 watermark[low]时，开始启动内核线程kswapd进行内存回收（每个zone一个），
+		直到该zone的空闲内存数量达到watermark[high]后停止回收。
+	如果上层申请内存的速度太快，导致空闲内存降至watermark[min]后，内核就会进行direct reclaim（直接回收），
+	即直接在应用程序的进程上下文中进行回收，
 	再用回收上来的空闲页满足内存申请，因此实际会阻塞应用程序，带来一定的响应延迟，而且可能会触发系统OOM。
 	这是因为watermark[min]以下的内存属于系统的自留内存，用以满足特殊使用，所以不会给用户态的普通申请来用。
 
 	3）三个watermark的计算方法：
-	 watermark[min] = min_free_kbytes换算为page单位即可，假设为min_free_pages。（因为每个zone各有一套watermark参数，实际计算是根据各个zone大小所占内存总大小的比例而算出来的per zone min_free_pages）
+	 watermark[min] = min_free_kbytes换算为page单位即可，假设为min_free_pages。（因为每个zone各有一套watermark参数，
+						实际计算是根据各个zone大小所占内存总大小的比例而算出来的per zone min_free_pages）
 	 watermark[low] = watermark[min] * 5 / 4
 	 watermark[high] = watermark[min] * 3 / 2
 
@@ -572,10 +595,11 @@
 		   low	  81
 		   high	 97
 	
-	3.min_free_kbytes大小的影响
+	3. min_free_kbytes大小的影响
 
 	1）min_free_kbytes设的越大，watermark的线越高，同时三个线之间的buffer量也相应会增加。
-	这意味着会较早地启动kswapd进行回收，且回收上来较多的内存（直至watermark[high]才会停止），这会使得系统预留过多的空闲内存，从而在一定程度上降低了应用程序可使用的内存量。
+	这意味着会较早地启动kswapd进行回收，且回收上来较多的内存（直至watermark[high]才会停止），
+	这会使得系统预留过多的空闲内存，从而在一定程度上降低了应用程序可使用的内存量。
 	极端情况下设置min_free_kbytes接近内存大小时，留给应用程序的内存就会太少而可能会频繁地导致OOM的发生。
 
 	2）min_free_kbytes设的过小，则会导致系统预留内存过小，有可能会导致内核deadlock。
@@ -635,7 +659,8 @@
 	zone[i]->protection[j] 的计算规则：
 	
 		(i < j):
-		 zone[i]->protection[j]  //表示当高端zone[j]尝试从低端的zone[i]中分配内存时，要确保低端zone[i]有一点的空闲内存时，zone[i]才比较安全
+		 zone[i]->protection[j]  //表示当高端zone[j]尝试从低端的zone[i]中分配内存时，
+									要确保低端zone[i]有一点的空闲内存时，zone[i]才比较安全
 		 = (total sums of present_pages from zone[i+1] to zone[j] on the node) / lowmem_reserve_ratio[i];
 		(i = j):
 		  (should not be protected. = 0;）
@@ -666,7 +691,8 @@
 	
 	例如：
 	(1）如果一个来自normal区(index = 2，高位zone)的页申请试图分配低位DMA区的内存，且当前使用的判断标准是watermark[low]时，
-	DMA zone的page_free= 1355，但 page_free < watermark[low]+protection[2]= 3+2004= 2007，则认为DMA zone空闲内存太少而不予以分配；
+	DMA zone的page_free= 1355，但 page_free < watermark[low]+protection[2]= 3+2004= 2007，
+	则认为DMA zone空闲内存太少而不予以分配；
 	
 	(2）如果分配请求来自DMA zone自身，因 page_free > watermark[low]+protection[0]= 3+0, 所以予以分配。
 	
@@ -796,7 +822,8 @@
  
 		1）overcommit_memory： 指定了内核针对内存分配的策略，其值可以是0、1、2
 	
-		0，表示内核将检查是否有足够的可用内存 供应用进程使用；如果有足够的可用内存，内存申请允许；否则，内存申请失败，并把错误返回给应用进程。
+		0，表示内核将检查是否有足够的可用内存 供应用进程使用；如果有足够的可用内存，内存申请允许；
+			否则，内存申请失败，并把错误返回给应用进程。
 		1，表示内核允许分配所有的物理内存，而不管当前的内存状态如何
 		2，表示内核允许分配超过所有物理内存和交换空间总和的内存，即CommitLimit
 	

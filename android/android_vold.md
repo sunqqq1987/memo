@@ -1,4 +1,4 @@
-# android上的VOLD守护进程 #
+# android的Vold守护进程 #
 
 	参考
 	https://blog.csdn.net/new_abc/article/details/7396733  android usb挂载分析----vold启动
@@ -24,22 +24,26 @@
 		nm->start();
 		cl->startListener();
 
+
+
 - 1) NetlinkManager(NM)
 
 		kernel的uevent通过内核的Netlink(特殊的socket方式）往用户空间上报插入等事件(因为card/usb storage device的KObject状态发生变化了)，
 		NetlinkManager监听到这个事件，进而usb/card device被VolumeManager管理
 
-		
-
 - 2) VolumeManager(VM)
 
 		管理多个device，如SD cards, usb storage devices, 而每个device有一个对应的handler
 
-		调用process_config(), 它的主要功能是解析/etc/vold.fstab，这个文件的作用和Linux系统中的fstab文件很类似，就是设置一些存储设备的挂载点.
+		调用process_config(), 它的主要功能是解析/system/core/rootdir/etc/vold.fstab，
+		这个文件的作用和Linux系统中的fstab文件很类似，就是设置一些存储设备的挂载点.
 
 	<img src="./pic/VOLD2.png" width= 700><br>
 	<img src="./pic/VOLD3.png" width= 600><br><br>
+		注意：如果第一个设备路径被占用，会选择第二个
+
 	<img src="./pic/VOLD4.png" width= 600><br><br>
+
 	<img src="./pic/VOLD5.png" width= 600><br>
 
 - 3) CommandListener
@@ -63,9 +67,25 @@
 		MountService通过NativeDaemonCcmnector和Vold的CL模块建立通信连接
 
 
-- 过程分析
+- 4) 过程分析
 
-		1) 插入sd card -> Kernel(/sys/block/mmcblk0/uevent) 
+		1) Android SDCard Mount 流程分析
+		参考： https://blog.csdn.net/loongembedded/article/details/64908958
+
+		usbdisk 或者 sdcard 热插拔的时候，kernel 会发出命令执行mount或者unmount 操作，但这都是驱动级的。
+		/dev/block/vold 目录由vold生成，用来存放所有的usbdisk 或者 sdcard 的设备节点。
+		代码位于main里面最优先执行：
+		mkdir("/dev/block/vold", 0755); 
+		
+		可以根据这个目录找到如下设备节点：
+		# ls /dev/block/vold/
+		179:0  179:1  8:0    8:1    8:2    8:3    8:4 
+		
+		0代表当前的整个设备，1代码当前设备的分区名称代号。
+		所以你会发现，sdcard只有一个分区它却生成了两个设备节点：179:0 179:1
+		而usbdisk 有四个分区，它会生成五个设备节点： 8:0    8:1    8:2    8:3    8:4
+
+		2) 插入sd card -> Kernel(/sys/block/mmcblk0/uevent) 
 		-> NetLinkManager(socket通信) -> NetlinkHandler(.onEvent())
 		-> VolumeManager(.handleBlockEvent()) -> DirectVolume(.handleBlockEvent()/.handleDiskAdded())
 		-> Mountservice.java(.doMountVolume()/.onEvent()/.notifyVolumeStateChange()) 
@@ -75,7 +95,7 @@
 		
 	<img src="./pic/VOLD9.png" width= 600><br>
 
-		2) 由MountService发起挂载请求:
+		3) 由MountService发起挂载请求:
 		上层setting -> Mountservice.java -> CommandListener -> VolumeManager -> Volume-> USB storage device或者SD device
 	
 
@@ -83,7 +103,7 @@
 - Netlink
 
 		Netlink是Linux系统中用户空间进程和Kernel进行通信的一种机制，通过这种机制，
-		位于用户空间的进程可以接收来自Kerne的一些消息（例如Void中用到的USB或SD的插 拔消息），
+		位于用户空间的进程可以接收来自Kerne的一些消息（例如Vold中用到的USB或SD的插 拔消息），
 		同时应用层也可通过Netlink向Kernel发送一些控制命令（怎么做？）。
 
 		目前，Linux系统并没有为NetUnk单独设计一套系统调用，而是复用了 Socket的操作接口，
@@ -94,8 +114,8 @@
 		Uevent和Linux的Udev设备文件系统及设备模型有关系，它实际上就是一串字符串， 字符串的内容可告知发生了什么事情。
 		下面通过一个实例来直观感受uevent.
 
-		在SD卡插人手机后，系统会检测到这个设备的插人，然后内核会通过Netlink发送一个消息给Void, 
-		Vold将根据接收到的消息进行处理，例如挂载这个SD卡，内核发送的这个消息，就是Invent, 
+		在SD卡插人手机后，系统会检测到这个设备的插人，然后内核会通过Netlink发送一个消息给Vold, 
+		Vold将根据接收到的消息进行处理，例如挂载这个SD卡，内核发送的这个消息，就是uevent, 
 		其中U代表User space (应用层空间).
 
 		下面看SD卡插入时Vold截获到的Uevent消息:

@@ -1,3 +1,7 @@
+# 参考 #
+
+	http://www.cnblogs.com/lifexy/category/1076894.html  linux底层驱动
+
 # 驱动编译 #
 
 - makefile和kconfig
@@ -126,9 +130,16 @@
 		TS_DEBUG("hello\n");
 		TS_DEBUG("%d, %d\n", num , num2);
 
-# device和driver的绑定
+# device/driver的绑定(匹配) #
+	
+	参考
+	http://blog.csdn.net/qwaszx523/article/details/65635071
+	https://blog.csdn.net/wh8_2011/article/details/51711440  设备驱动模型之device-driver
 
-	参考 https://blog.csdn.net/wh8_2011/article/details/51711440  设备驱动模型之device-driver
+	内核中driver和 device是分别注册的，但最终都依附于某一总线。
+	他们的匹配过程是：
+	在driver注册时调用函数driver_match_device()进行driver和device的匹配，
+	在匹配之后执行driver的probe函数进行初始化等操作。
 
 <img src="./pic/PCI1.png" width= 600><br><br>
 
@@ -136,7 +147,7 @@
 	bus_probe_device()会试图为已挂在总线上的该设备寻找对应的驱动:
 	它先检查bus->p->drivers_autoprobe，看是否允许自动探测, 允许了才会调用device_attach()进行实际的寻找工作。
 	
-device_attach()
+	device_attach()：
 
 	1) 如果在调用device_attach()前就已经有了dev->driver()，就调用device_bind_driver()进行绑定：
 	=>将device加入它所属的driver的设备链表
@@ -155,6 +166,70 @@ device_attach()
 	=> 如果driver_match_device()匹配成功了，继续调用driver_probe_devices()完成绑定。
 	driver_probe_devices()-> really_probe()完成的绑定工作和device_bind_driver()差不多，
 	只是它还会调用bus->probe或者drv->probe中定义的probe函数。
+
+- 内核添加dts后，device和device_driver的match匹配的变动
+
+        参考
+        https://blog.csdn.net/shenhuxi_yu/article/details/77921608
+
+        所有的struct bus_type 实例，如：platform_bus_type、mipi_dsi_bus_type、
+		hsi_bus_type、i2c_bus_type、spi_bus_type 等的match函数都会调用of_driver_match_device()
+		进行driver和device的匹配：
+        of_driver_match_device()->__of_match_node()，在这个函数里，
+		通过把device_driver.of_match_table（of_device_id结构体的数组）和device.of_node（device_node结构体）进行匹配，
+        匹配方式是分别比较两者的name、type、和compatible字符串, 找到最匹配的项，规则如下，见__of_device_is_compatible():
+
+        * 1. specific compatible && type && name
+        * 2. specific compatible && type
+        * 3. specific compatible && name
+        * 4. specific compatible
+        * 5. general compatible && type && name
+        * 6. general compatible && type
+        * 7. general compatible && name
+        * 8. general compatible
+        * 9. type && name
+        * 10. type
+        * 11. name
+
+        一般name、和type为空，只比较compatible字符串. 比较compatible时，是比较整个字符串，
+		不管字符串里的逗号的，直接compare整个字符串
+
+
+        compatible属性：用于将设备与driver匹配的关键字，通过of_match_table[]来匹配时会用到它
+
+        of_match_table[]与id_table[]的区别：
+        of_match_table: 用于添加了device tree的情况，优先匹配
+        id_table： 当无device tree或者device tree不匹配时，用id_table来匹配
+
+        device tree 中的of就是OpenFirmware的缩写
+
+# kernel input #
+
+	设置输入设备支持的事件类型和事件代码:
+	set_bit(EV_KEY,button_dev->evbit);
+	set_bit(KEY_1,button_dev->keybit); //按键1
+	 
+	也可以直接调用input_set_capability来完成：
+	input_set_capability(input_dev,EV_KEY, KEY_1);
+	
+	
+	设置范围参数：
+	void input_set_abs_params(struct input_dev *dev, unsigned int axis,
+	              int min, int max, int fuzz, int flat)
+	              
+	 input_set_abs_params(input_dev,ABS_MT_POSITION_X,0,SCREEN_MAX_X,4,0),
+	 //表示：X轴范围是0到SCREEN_MAX_X，数据误差是-4到+4，中心平滑位置是0 .
+	 
+	 * struct input_absinfo - used by EVIOCGABS/EVIOCSABS ioctls
+	@value: latest reported value for the axis.
+	* @minimum: specifies minimum value for the axis.
+	* @maximum: specifies maximum value for the axis.
+	* @fuzz: specifies fuzz value that is used to filter noise from the event stream.
+	* @flat: values that are within this value will be discarded by joydev interface and reported as 0 instead.
+	@resolution: specifies resolution for the values reported for the axis.
+	* * Note that input core does not clamp reported values to the [minimum, maximum] limits, such task is left to userspace.
+	Resolution for main axes (ABS_X, ABS_Y, ABS_Z) is reported in units per millimeter (units/mm),
+	resolution for rotational axes (ABS_RX, ABS_RY, ABS_RZ) is reported in units per radian.
 
 
 # 设备 #
@@ -258,16 +333,6 @@ device_attach()
 	sysfs将系统上的设备和总线组成一个分级的文件结构，目的就是展示设备驱动模型中各组件的层级关系。
 	内核中设备驱动模型使用bus_type, device_driver, device 这3个结构体来描述总线，驱动和设备。
 	见device.h
-
-
-# driver/device的匹配 #
-	
-	参考： http://blog.csdn.net/qwaszx523/article/details/65635071
-
-	内核中driver和 device是分别注册的，但最终都依附于某一总线。
-	他们的匹配过程是：
-	在driver注册时调用函数driver_match_device进行driver和device的匹配，
-	在匹配之后执行driver的probe函数进行初始化等操作。
 	
 
 # 阻塞与非阻塞IO #
@@ -321,7 +386,16 @@ device_attach()
 
 	PIC中断控制器: 屏蔽、使能中断通过中断MASK寄存器来完成，获取中断状态可以通过中断PEND寄存器来完成。
 	ARM常用中断控制器是GIC.
+
+	ARM多核处理器的GIC中断的类型：
+    1）SPI(shared peripheral interrupt): 外设的中断可以发给任何一个CPU
+    2）PPI(Private peripheral interrupt)： 外设的中断只能发个指定的CPU
+    3）SGI(software general interrupt): 软件产生的中断，可以发送给其他CPU
+		(如IPI_xxx类的中断，可以通过写GIC的寄存器，从一个cpu发送到另一个CPU)
+
+    ARM GIC图：TBD
 	
+
 	软中断以及基于软中断的tasklet如果在某段时间内大量出现，内核会把后续软中断放入ksoftd内核线程中执行，
 	以缓解高负载情况下的系统响应。
 
@@ -369,8 +443,29 @@ device_attach()
 
 	<img src="./pic/INTERRUPT4.png" width= 600><br>
 	
+- 中断的分发
+	
+		参考： https://blog.csdn.net/skyflying2012/article/details/46681675
+		
+		内核的中断号可以与硬件中断号不一致
+
+		中断初始化：
+		通用函数start_kernel -----> 处理器平台级函数init_IRQ -----> 板级中断初始化函数init_irq等
+		对于arm处理器，init_IRQ调用对应设备描述符machine_desc的init_irq。
+		
+		对于arm处理器，执行流程如下：
+		vector_irq ---> irq_handler ---> arch_irq_handler_default ---> asm_do_IRQ ---> handle_IRQ
+		在 arch_irq_handler_default 中调用get_irqnr_and_base获取中断号，传给asm_do_IRQ作为参数。
+		get_irqnr_and_base由板级支持包实现。
+
+		板级支持包中会读取中断控制器中相关寄存器来获取当前产生的中断情况，进而返回中断号。
+		如果我们想将35号中断的中断处理函数在注册时放在30号irq_desc中（方法是request_irq时中断号写30）。
+		那么在中断分发时，获取中断号函数中我们也需要进行修改：查询到中断控制器寄存器状态是产生35号中断时，我们返回中断号为30
+
 
 # 内存管理 #
+
+- 驱动里用的栈是定长的（对于32位OS, 是8k）, 所以在使用大的缓冲区时需要动态申请（kmalloc/vmalloc）
 
 - IO端口与IO内存
 
@@ -640,6 +735,18 @@ device_attach()
 	gpio10  : out 2 2mA no pull
 	...
 
+	GPIO口都是多功能的，可以做输入、输出、外部中断、控制器的引脚。
+	统一编址：内存芯片的地址与控制器的配置内存接口是在同一地址范围里的。
+	arm基本上都是统一编址，也就意味着我们改变控制器的相关配置时，对控制的配置接口（配置寄存器）像内存一般访问即可。
+	
+	输入是指IO口只可以用于获取电平，不能改变电平。
+	输出是指IO口既可以改变电平，也可以获取电平。
+	
+	在uboot上使用”mw”，”md”命令来配置或获取IO口的电平：
+	mw.l 0x01c20804 0x10000000 1  //PA15口作输出，即改变配置寄存器PA_CFG1(0x01c20804)的第28~30位的值为1
+	mw.l 0x01c20810 0x8000 1 //第15位的值为1，即PA组的第15个IO口输出高电平，LED亮
+	mw.l 0x01c20810 0 1  //LED灭
+
 
 # pinctrl #
 
@@ -800,6 +907,7 @@ device_attach()
 	片选: CS#，其中#表示低电平有效
 	数据/命令引脚: D/C#
 	VCC: 电源正
+	VDD: 外部的输入电源
 
 # PM #
 
@@ -844,3 +952,13 @@ device_attach()
 	1）RGB接口
 	
 	https://blog.csdn.net/xubin341719/article/details/9177085 
+
+	LCD TE这个pin脚定义为Tearing effect，主要起到数据同步作用。
+	将摄像头采集的模拟信号转为数字图像信号，host将数字图像信号传输至显示屏上，为了不出现图像撕裂（被分割成几块）的画面，引入了TE功能，将一帧图像可以完整的不被撕裂的传输到显示屏上。
+	
+	horizontal front porch (HFP) blanking period
+	horizontal back porch (HBP) blanking period
+	horizontal sync active (HSA) mode
+	
+	DSI escape clock
+	the default escape clock on most chipsets is 19.2 Mhz

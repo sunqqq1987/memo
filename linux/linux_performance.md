@@ -207,12 +207,14 @@
 	如果你认为这个系统空闲内存太小，那就错了，实际上，内核会在需要内存的时候，将buffers和cached状态的内存变为free状态的内存。
 	shared1：共享内存（一般可以不理）。
 	
-	buffers1：表示块设备(block device)所占用的缓存页，包括直接读写块设备、以及文件系统元数据(metadata)如SuperBlock所使用的缓存页.
-			如：直接访问/dev/sda1时，如用户程序直接打开open(“dev/sda1…)或执行dd命令，以及文件系统本身去访问裸分区，
+	==================================
+	buffers1：表示块设备(block device)所占用的页缓存，包括直接读写块设备、以及文件系统元数据(metadata)如SuperBlock所使用的缓存页.
+		如：直接访问/dev/sda1时，如用户程序直接打开open(“dev/sda1…)或执行dd命令，以及文件系统本身去访问裸分区
 	
-	cached1：表示普通文件所占用的缓存页. 一般当以文件系统（ext4,xfs等）的形式去访问文件系统中的文件，如mount /dev/sda1 /mnt后，/mnt目录下会有很多文件
+	cached1：表示普通文件所占用的页缓存. 一般当以文件系统（ext4,xfs等）的形式去访问文件系统中的文件，如mount /dev/sda1 /mnt后，/mnt目录下会有很多文件.
 	
 	buffers与cached都是文件系统的缓存，没有本质区别，唯一区别是背景不同
+	==================================
 	
 	--------第二行数据：代表应用角度的统计--------
 	used2：实际使用内存总量。
@@ -228,7 +230,7 @@
 	
 	
 	
-- 释放Cache Memory
+- 释放Cache
 	
 		To free page cache(页缓存):
 		echo 1 > /proc/sys/vm/drop_caches
@@ -276,7 +278,7 @@
 	file占用的内存是可以释放的，但是释放的过多，会导致swap发生，减去部分内存的目的是避免swap
 	
 	
-	Buffers：用于块设备(block device)的page缓冲
+	Buffers：用于块设备(block device)的页缓存
 	long nr_blockdev_pages(void)
 	{
 		struct block_device *bdev;
@@ -290,7 +292,7 @@
 	}
 	
 	
-	Cached：普通文件占用的缓冲
+	Cached：普通文件占用的页缓存
 	global_page_state(NR_FILE_PAGES) – total_swapcache_pages – i.bufferram
 	
 	NR_FILE_PAGES：所有缓冲页(page cache)的总和，包括 cached+buffer+swap cache
