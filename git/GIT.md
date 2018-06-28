@@ -5,6 +5,18 @@
     (1) –h选项: 显示简要用法说明 比如：git diff -h 
     (2) –help选项： 显示完整的用法说明 比如：git diff --help
  
+##常用git命令
+ 
+	1)只显示某个文件的提交
+	git log --pretty=oneline 文件名
+
+	2）显示某次提交
+	git show <commit-id>
+	git show <commit-id> --stat  //只显示修改的文件
+
+	3)查看指定用户的git提交记录
+	git log --author=username --pretty=oneline
+ 
 ## git init 建立仓库 ##
 git init命令把当前目录变成Git可以管理的仓库：
 
