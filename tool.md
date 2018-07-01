@@ -1,3 +1,19 @@
+# vscode #
+
+	1）从 https://code.visualstudio.com/Download 下载deb包 进行安装
+
+	2）安装preview 插件：Markdown Preview Enhanced
+	ctl + K, V 进行preview
+
+	3）安装生成pdf的插件：Markdown PDF
+	右键,markdown-pdf: Export (pdf)
+
+	4) ctrl+ -/+ 进行字体缩放
+
+# ubuntu上安装火狐中文版 #
+
+	https://blog.csdn.net/qq_37772981/article/details/79943848
+
 # 1 ATOM #
 
 - 快捷键
