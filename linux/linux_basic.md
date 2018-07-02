@@ -11,22 +11,24 @@
 	
 			参考：https://blog.csdn.net/guyongqiangx/article/details/73000434
 	
-		    find /etc -name '*srm*'  		#在/etc目录下查找文件名包括srm的文件
-			find /etc -name '*srm*'-type d 	#查找目录？
+			注意： 带通配符匹配的部分，要加上双引号
+
+		    find /etc -name "*srm*"  //在/etc目录下查找文件名包括srm的文件
+			find /etc -name "*srm*" -type d  //查找目录？
 			
 			find / -name "*.txt"  2>/dev/null //忽略查找时的输出的错误log
 			
 			find . -iname makefile  //查找当前目录下所有名为makefile的文件，并忽略大小写
-			find . -iname *.iso -size +100M  //查找当前目录下所有大于100MB的ISO文件
+			find . -iname "*.iso" -size +100M  //查找当前目录下所有大于100MB的ISO文件
 
 			find . -type d -name libmediaplayerservice //查找名为的libmediaservice文件夹
 
-			find . -name *.dts -path "*/tests/*" //查找当前所有路径中包含tests的目录下的*.dts文件
+			find . -name "*.dts" -path "*/tests/*" //查找当前所有路径中包含tests的目录下的*.dts文件
 
 			find . -type f | wc -l //统计当前目录下文件的数目
 
 			-exec  //对查找结果进行指定操作
-			find . -name *.txt -type f -print -exec rm -rf {} \;  //删除目录及其子目录下某种类型文件
+			find . -name "*.txt" -type f -print -exec rm -rf {} \;  //删除目录及其子目录下某种类型文件
 
 			-a/-o  //多个条件合并查找
 			-prune //指定排除查找的条件
@@ -42,12 +44,14 @@
 
 	- grep内容
 
-		    grep -nR "build" ./* >../build.txt #在当前目录下查找包括build的文本的行(显示行号)，并将结果输出到build.txt
+		    grep -nR "build" ./* 2>/dev/null >../build.txt 
+			//在当前目录下查找包括build的文本行(显示行号)，并将结果输出到build.txt
+			//2>/dev/null 表示排除错误log
 		
 		    grep 'test' d* 		//查找所有以d开头的文件中包含test的行
-		    grep 'test' aa bb cc 	//查找在aa，bb，cc文件中包含test的行
+		    grep 'test' aa bb cc //查找在aa，bb，cc文件中包含test的行
 
-			grep -rn "BRILLO_USE_" . --exclude-dir=out //查找时排除out目录
+			grep -nR "BRILLO_USE_" . --exclude-dir=out //查找时排除out目录
 
 	- locate
 
@@ -60,9 +64,8 @@
 - 查看大小
 
 		df -h //查看每个文件系统对应的分区的使用情况
-		du -h //查看各文件/文件夹的大小. 它会遍历每个文件、文件夹的方式显示， 但文件夹的大小是不准确的
+		du -sh //查看各文件/文件夹的大小.
 		ls -lh //类型du -h, 只是显示方式不一样
-		
 
 - 合并文件 past
 
@@ -105,7 +108,7 @@
 
 - cp 拷贝指定的目录
 
-    	cp -r s/c  d/   #d目录变成d/c, 注意要加-r
+    	cp -r s/c  d/   //d目录变成d/c, 注意要加-r
 
 - scp 拷贝远程服务器上的文件到本地
 
@@ -156,7 +159,7 @@
 
 - 多页显示
 
-    	ls |more
+    	ls | more
 
 - kill进程
 

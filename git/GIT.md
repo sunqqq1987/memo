@@ -59,6 +59,8 @@ git init命令把当前目录变成Git可以管理的仓库：
     $ git init
     Initialized empty Git repository in /Users/michael/learngit/.git/
 
+## 11 ##
+
 ## git diff ##
     (1) 三种比较方式
     $ git diff 			#比较工作树与暂存区 
@@ -104,7 +106,7 @@ git init命令把当前目录变成Git可以管理的仓库：
 
     git add readme.txt  	#添加文件的修改到暂存区
     git add –A   			#添加工作区目录下所有文件的修改和删除，以及新增，添加到暂存区。
-    git add –u 				#将工作区目录下所有文件的修改和删除，添加到暂存区。
+    git add –u 				#将工作区目录下所有文件的修改和删除(不包括新增的），添加到暂存区。
 
 **git commit** 将修改提交到本地仓库
 
