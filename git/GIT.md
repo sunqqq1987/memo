@@ -7,118 +7,111 @@
  
 ## 常用git命令 ##
 
-	1)只显示某个文件的提交
-	git log --pretty=oneline 文件名
+    1)只显示某个文件的提交
+    git log --pretty=oneline 文件名
 
-	2）显示某次提交
-	git show <commit-id>
-	git show <commit-id> --stat  //只显示修改的文件
+    2）显示某次提交
+    git show <commit-id>
+    git show <commit-id> --stat  //只显示修改的文件
 
-	3)查看指定用户的git提交记录
-	git log --author=username --pretty=oneline
+    3)查看指定用户的git提交记录
+    git log --author=username --pretty=oneline
 
-	4)查找commit信息中的含指定信息的提交
-	git log --grep=charger
+    4)查找commit信息中的含指定信息的提交
+    git log --grep=charger
 
-	5)定制要显示的记录格式
-	$ git log --pretty=format:"%h - %ae, %ar : %s" --grep=charger --author=codeaurora.org
-	a68ce5d - 12@codeaurora.com, 3 months ago : drivers: usb: enable floated charger
+    5)定制要显示的记录格式
+    $ git log --pretty=format:"%h - %ae, %ar : %s" --grep=charger --author=codeaurora.org
+    a68ce5d - 12@codeaurora.com, 3 months ago : drivers: usb: enable floated charger
 
-	git log --pretty=format:"%h - %ae, %cd : %s" --grep=charger --author=xx.com
-	ada5327 - bjzhu@xx.com, Fri Mar 30 04:24:14 2018 +0000 : Merge "drivers: usb: enable floated charger" into andr
-	a68ce5d - bjzhu@xx.com, Fri Mar 30 12:00:02 2018 +0800 : drivers: usb: enable floated charger
+    git log --pretty=format:"%h - %ae, %cd : %s" --grep=charger --author=xx.com
+    ada5327 - bjzhu@xx.com, Fri Mar 30 04:24:14 2018 +0000 : Merge "drivers: usb: enable floated charger" into andr
+    a68ce5d - bjzhu@xx.com, Fri Mar 30 12:00:02 2018 +0800 : drivers: usb: enable floated charger
 
-	参考：https://blog.csdn.net/c1958/article/details/76128056
+    参考：https://blog.csdn.net/c1958/article/details/76128056
 
-	6) 基于远程分支创建本地分支
-	git branch test1 remotes/xx
-	git checkout test1
+    6) 基于远程分支创建本地分支
+    git branch test1 remotes/xx
+    git checkout test1
 
-	如果想删除分支,则：
-	git branch -d test1
-
-
-	7) 撤销本地分支的上一次commit
-	git reset --hard HEAD^  #回退工作区，暂存区以及本地版本到当前版本库里的上一个版本（已经git commit）。
-
-	8）更新远程分支的修改到当前分支
-	方法一：
-	git pull 　　//这可能会发生merge
-	方法２:
-	git rebase   [other branch] //本地修改会在最新的分支基础上，可能会有冲突
+    如果想删除分支,则：
+    git branch -d test1
 
 
-	9) git commit时修改作者信息
-	git commit -m "xx"  --author="xx <xx@126.com>"
-	注意author部分的格式
-	
+    7) 撤销本地分支的上一次commit
+    git reset --hard HEAD^  #回退工作区，暂存区以及本地版本到当前版本库里的上一个版本（已经git commit）。
+
+    8）更新远程分支的修改到当前分支
+    方法一：
+    git pull 　　//这可能会发生merge
+    方法２:
+    git rebase   [other branch] //本地修改会在最新的分支基础上，可能会有冲突
+
+
+    9) git commit时修改作者信息
+    git commit -m "xx"  --author="xx <xx@126.com>"
+    注意author部分的格式
+    
  
-## git init 建立仓库 ##
-
-git init命令把当前目录变成Git可以管理的仓库：
-
-    $ git init
-    Initialized empty Git repository in /Users/michael/learngit/.git/
-
 ## git diff ##
 
     (1) 三种比较方式
-    $ git diff 			 #比较工作树与 暂存区
-	$ git diff HEAD 	 #比较工作树与 当前分支中最后一次提交(HEAD)
-	$ git diff --cached  #比较暂存区与 当前分支中最后一次提交(HEAD） 
-	
+    $ git diff              #比较工作树与 暂存区
+    $ git diff HEAD      #比较工作树与 当前分支中最后一次提交(HEAD)
+    $ git diff --cached  #比较暂存区与 当前分支中最后一次提交(HEAD） 
+    
      
     (2) 任意比较
-    $ git diff test  			#比较当前分支与 test分支
-	$ git diff HEAD -- ./test 	#比较当前分支最后一次提交与 工作树中的test文件 
-	$ git diff HEAD^  HEAD 	#比较当前分支的最后两次提交
+    $ git diff test              #比较当前分支与 test分支
+    $ git diff HEAD -- ./test     #比较当前分支最后一次提交与 工作树中的test文件 
+    $ git diff HEAD^  HEAD     #比较当前分支的最后两次提交
      
     (3) 比较分支
-    $ git diff topic master 	#比较topic和master分支的HEAD 
-	$ git diff topic..master 	#同1 
-	$ git diff topic...master 	#从topic分支开始时起, 在master分支上发生的更改
+    $ git diff topic master     #比较topic和master分支的HEAD, 所以也可以使本地分支和远程分支的比较
+    $ git diff topic..master     #同1 
+    $ git diff topic...master     #从topic分支开始时起, 在master分支上发生的更改
      
     (4) 限制输出格式
-    $ git diff --diff-filter=MRC 			#只显示修改、重命名和复制, 但不能添加或删除。 
-	$ git diff --name-status  				#只显示名称和更改的性质, 而不是实际的 diff 输出。 
-	$ git diff arch/i386 include/asm-i386 	#将比较输出限制为子树 $ git diff –R 逆序输出差异
+    $ git diff --diff-filter=MRC             #只显示修改、重命名和复制, 但不能添加或删除。 
+    $ git diff --name-status                  #只显示名称和更改的性质, 而不是实际的 diff 输出。 
+    $ git diff arch/i386 include/asm-i386     #将比较输出限制为子树 $ git diff –R 逆序输出差异
      
-	(5) 查看当前分支中的两个commit id间的改动
-    git diff commit-id-1 commit-id-2  >> diff.txt  	#将2个commit间的不同 输出到文件 
-	git diff commit-id-1 commit-id-2 -- readme.txt  #具体某个文件的commit间的变更
+    (5) 查看当前分支中的两个commit id间的改动
+    git diff commit-id-1 commit-id-2  >> diff.txt      #将2个commit间的不同 输出到文件 
+    git diff commit-id-1 commit-id-2 -- readme.txt  #具体某个文件的commit间的变更
     
  
 ## git status /add/commit 提交修改到仓库 ##
 
 **git status**  告诉我们工作区中哪些文件改动了（修改或删除了）。
 
-	比如readme.txt被修改过了，但还没有提交。
+    比如readme.txt被修改过了，但还没有提交。
 
-	$ git status
-	# On branch master
-	# Changes not staged for commit:
-	#   (use "git add <file>..." to update what will be committed)
-	#   (use "git checkout -- <file>..." to discard changes in working directory)
-	#
-	#modified:   readme.txt
-	no changes added to commit (use "git add" and/or "git commit -a")
+    $ git status
+    # On branch master
+    # Changes not staged for commit:
+    #   (use "git add <file>..." to update what will be committed)
+    #   (use "git checkout -- <file>..." to discard changes in working directory)
+    #
+    #modified:   readme.txt
+    no changes added to commit (use "git add" and/or "git commit -a")
  
 **git add** 保存文件的修改到暂存区
 
-    git add readme.txt  	#添加文件的修改到暂存区
-    git add –A   			#添加工作区目录下所有文件的修改和删除，以及新增，添加到暂存区。
-    git add –u 				#将工作区目录下所有文件的修改和删除(不包括新增的），添加到暂存区。
+    git add readme.txt      #添加文件的修改到暂存区
+    git add –A               #添加工作区目录下所有文件的修改和删除，以及新增，添加到暂存区。
+    git add –u                 #将工作区目录下所有文件的修改和删除(不包括新增的），添加到暂存区。
 
 **git commit** 将修改提交到本地仓库
 
-    $ git commit -m "append GPL" 	#将暂存区的内容提交到本地版本库
+    $ git commit -m "append GPL"     #将暂存区的内容提交到本地版本库
 
     第一步是用git add把文件添加进去，实际上就是把文件修改添加到暂存区；
     第二步是用git commit提交更改，实际上就是把暂存区的所有内容提交到本地仓库的当前分支。
     如果要把两次修改合并后一块提交了，则可以：
     第一次修改 -> git add -> 第二次修改 -> git add -> git commit
     
-	git commit -a –m ”Comments” 将所有被跟踪过的文件一次性提交到本地仓库，相当于git add + git commit -m
+    git commit -a –m ”Comments” 将所有被跟踪过的文件一次性提交到本地仓库，相当于git add + git commit -m
 
     git commit -s -m "modify file2" #单行注释
 
@@ -133,71 +126,74 @@ git init命令把当前目录变成Git可以管理的仓库：
 
 **git commit --amend** 修改最后一次的提交
 
-	一、如果已经push到远端服务器，想修改已经提交过的commit信息  
-	1.保存:Ctrl + o; 回车 ;退出:Ctrl + x   
-	# git commit --amend  
+    一、如果已经push到远端服务器，想修改已经提交过的commit信息  
+    1.保存:Ctrl + o; 回车 ;退出:Ctrl + x   
+    # git commit --amend  
 
-	2.重新提交gerrit审批  
-	# git push --no-thin origin HEAD:refs/for/master  
+    2.重新提交gerrit审批  
+    # git push --no-thin origin HEAD:refs/for/master  
 
-	二、如果已经push到远端服务器,有漏掉的test.txt文件想提交到上一次的commit信息  
-	1.添加test.txt  
-	# git add test.txt
+    二、如果已经push到远端服务器,有漏掉的test.txt文件想提交到上一次的commit信息  
+    1.添加test.txt  
+    # git add test.txt
 
-	2.修改commit信息;保存:Ctrl + o; 回车 ;退出:Ctrl + x   
-	# git commit --amend 
+    2.修改commit信息;保存:Ctrl + o; 回车 ;退出:Ctrl + x   
+    # git commit --amend 
 
-	3.重新push到远端服务器  
-	# git push --no-thin origin HEAD:refs/for/master 
+    3.重新push到远端服务器  
+    # git push --no-thin origin HEAD:refs/for/master 
 
 ## git log -> reflog -> reset 回退版本库的版本或暂存区的修改 ##
 
 **git log** 只显示当前版本库里的所有提交记录的修改. 可以用来确定要回退到以前哪个版本。
 
-	git log --pretty=oneline  	#只简要地显示一行
-	git log --stat 				#按commit显示每个commit所改动的文件
-	 
-	git log -p -2 　#-p 选项展开显示每次提交的差异，-2 表示仅显示最近的两次提交的差异，否则显示所有提交的差异。
-	git log –p --full-diff  #当指定路径，除路径外的文件的不同也显示出来
+    git log --pretty=oneline      #只简要地显示一行
+    git log --stat                 #按commit显示每个commit所改动的文件
+     
+    git log -p -2 　#-p 选项展开显示每次提交的差异，-2 表示仅显示最近的两次提交的差异，否则显示所有提交的差异。
+    git log –p --full-diff  #当指定路径，除路径外的文件的不同也显示出来
 
-	git log -p --since="Tue Jul 25 21:15:04 2017 +0800" #获取指定日期后的提交
+    git log -p --since="Tue Jul 25 21:15:04 2017 +0800" #获取指定日期后的提交
 
-	git log -p --since=2.weeks : Check the info limited till 2 weeks before from current 
+    git log -p --since=2.weeks : Check the info limited till 2 weeks before from current 
 
-	git log remotes/origin/master 	#查看远程库上的更改（要先fetch下来）
-	git log --pretty=format:"%h %s" --graph  #按指定格式图形化显示提交记录
+    git log remotes/origin/master     #查看远程库上的更改（要先fetch下来）
+    git log --pretty=format:"%h %s" --graph  #按指定格式图形化显示提交记录
 
-	git log --grep="search condition"  //查找commit message中满足指定条件的提交
-
+    git log --grep="search condition"  //查找commit message中满足指定条件的提交
 
 **git reset** （前提是没有推送到远程库）回退文件到当前版本库的某个版本或撤销暂存区的修改。
     
-    	git reset --hard HEAD^  #回退工作区，暂存区以及本地版本到当前版本库里的上一个版本（已经git commit）。
-    	HEAD表示当前版本，也就是最新的提交commit id:3628164...882e1e0，
-	上一个版本就是HEAD^，上上一个版本就是HEAD^^，当然往上100个版本写100个^比较容易数不过来，所以写成HEAD~100。
+        git reset --hard HEAD^  #回退工作区，暂存区以及本地版本到当前版本库里的上一个版本（已经git commit）。
+        HEAD表示当前版本，也就是最新的提交commit id:3628164...882e1e0，
+    上一个版本就是HEAD^，上上一个版本就是HEAD^^，当然往上100个版本写100个^比较容易数不过来，所以写成HEAD~100。
 
-    	git reset --hard 3628164  #回退到指定的commit id 版本
-    	git reset HEAD file 	#撤销暂存区的修改（变为unstage状态），重新放回工作区.
+        git reset --hard 3628164  #回退到指定的commit id 版本
+        git reset HEAD file     #撤销暂存区的修改（变为unstage状态），重新放回工作区.
 
-	git reset               //撤消所有 git add（即撤销暂存区里的改动）
-	git reset hello.c       //撤消所有 git add hello.c
+    git reset               //撤消所有 git add（即撤销暂存区里的改动）
+    git reset hello.c       //撤消所有 git add hello.c
  
 **git reflog** 用来记录你的每一次命令, 以便确定要回到未来的哪个版本。
 在回退到本地库的某个版本时特别有用
 
-	$ git reflog
-	ea34578 HEAD@{0}: reset: moving to HEAD^
-	3628164 HEAD@{1}: commit: append GPL  //这里是最后的提交记录
-	ea34578 HEAD@{2}: commit: add distributed
-	cb926e7 HEAD@{3}: commit (initial): wrote a readme file
+    $ git reflog
+    ea34578 HEAD@{0}: reset: moving to HEAD^
+    3628164 HEAD@{1}: commit: append GPL  //这里是最后的提交记录
+    ea34578 HEAD@{2}: commit: add distributed
+    cb926e7 HEAD@{3}: commit (initial): wrote a readme file
  
+## git show ##
+
+    git show <commit-id>  //只显示某个commit的改动
+    
 ## git checkout ##
 
 **撤销工作区的修改 git checkout -- < file >**
 
 git checkout -- < file > #仅撤销工作区上的修改,使其回到索引区或本地仓库的状态
 
-	事先用git status查看一下会被告知工作区的文件已经被改动：
+    事先用git status查看一下会被告知工作区的文件已经被改动：
     $ git status
 
     $ git checkout -- readme.txt // 回到最近一次git commit或git add后的状态
@@ -223,32 +219,32 @@ git checkout < new_branch > 命令切换到新分支
     git checkout < new_branch >  切换到新分支
 
 实例
-	
-	git checkout -- readme.txt  //丢弃工作区中readme.txt的修改（恢复为暂存区或本地仓库的版本）
-	git checkout HEAD ./myfile
-	git checkout <Branch name> -- <path> //checkout分支指定的文件，Get latest folder source for specific branch
-	
-	git checkout dev_branch   //切换到分支dev_branch且保留当前工作树的修改
-	git checkout -b branch1   //创建新分支并切换到branch1
-	git checkout -b branch1 origin/branch1 //Clone the project of remote storage and create in local storage
-	git checkout -b mydev master //基于本地的master分支基础上创建新的本地分支mydev
-	
-	git checkout -b tmp-branch 0559ebf03c853938e4aa812b2b77bba73029c594 //基于指定的commit id进行checkout??
-	
-	
-	git checkout -f [<branch>] 切换分支但会丢弃工作树和索引区的修改
+    
+    git checkout -- readme.txt  //丢弃工作区中readme.txt的修改（恢复为暂存区或本地仓库的版本）
+    git checkout HEAD ./myfile
+    git checkout <Branch name> -- <path> //checkout分支指定的文件，Get latest folder source for specific branch
+    
+    git checkout dev_branch   //切换到分支dev_branch且保留当前工作树的修改
+    git checkout -b branch1   //创建新分支并切换到branch1
+    git checkout -b branch1 origin/branch1 //Clone the project of remote storage and create in local storage
+    git checkout -b mydev master //基于本地的master分支基础上创建新的本地分支mydev
+    
+    git checkout -b tmp-branch 0559ebf03c853938e4aa812b2b77bba73029c594 //基于指定的commit id进行checkout??
+    
+    
+    git checkout -f [<branch>] 切换分支但会丢弃工作树和索引区的修改
 
 ## git rm ##
 
 **删除暂存区、仓库和工作区上的文件: git rm -> commit**
 
-	git rm file_path
-	git commit -m 'delete somefile'
+    git rm file_path
+    git commit -m 'delete somefile'
 
 **删除暂存区、仓库上的文件, 但本地又需要使用:  git rm –cached  -> commit**
 
-	git rm --cached file_path 
-	git commit -m 'delete remote somefile'
+    git rm --cached file_path 
+    git commit -m 'delete remote somefile'
 
 ## Github账户创建 ##
 
@@ -261,124 +257,111 @@ Github:  https://github.com
     然后将本机的ssh key添加到个人的github account setting 中。
 
 ## git remote ##
-	
-	git remote add <shortname> <url> //添加一个新的远程Git仓库，同时指定一个你可以轻松引用的简写shortname。
-				如：git remote add origin git@github.com:samlin930/learngit.git
-	
-	git remote show [remote-name] //列出远程仓库的 URL 与跟踪分支的信息
+    
+    git remote add <shortname> <url> //添加一个新的远程Git仓库，同时指定一个你可以轻松引用的简写shortname。
+                如：git remote add origin git@github.com:samlin930/learngit.git
+    
+    git remote show [remote-name] //列出远程仓库的 URL 与跟踪分支的信息
 
 ## git push 将本地库到远程库 ##
 
-	格式：git push [remote-name] [branch-name]//把本地的branch推送到远程库的branch
+    格式：git push [remote-name] [branch-name]//把本地的branch推送到远程库的branch
 
-	git push -u origin master //把本地库的master分支推送到远程库的master
+    git push -u origin master //把本地库的master分支推送到远程库的master
 
 **对于本机来说，远程库的名字就是origin**，这是Git默认的叫法.
 由于远程库是空的，我们第一次推送master分支时，加上了-u参数，Git不但会把本地的master分支内容推送的远程新的master分支，
 还会把本地的master分支和远程的master分支关联起来，在以后的推送或者拉取时就可以简化命令:
 
-	git push origin master
+    git push origin master
 
 **将代码push到远程特定的分支上**
 
-	格式：git push origin HEAD:refs/for/分支名
+    格式：git push origin HEAD:refs/for/分支名
 
-	代码提交到远程分支master上，则： 
-	git push origin HEAD:refs/for/master  <src>:<dst>
+    代码提交到远程分支master上，则： 
+    git push origin HEAD:refs/for/master  <src>:<dst>
 
 **引用规格的格式**
 
-	[remote "origin"]
-		url = https://github.com/schacon/simplegit-progit
-		fetch = +refs/heads/*:refs/remotes/origin/*
+    [remote "origin"]
+        url = https://github.com/schacon/simplegit-progit
+        fetch = +refs/heads/*:refs/remotes/origin/*
 引用规格的格式由一个可选的 + 号和紧随其后的 <src>:<dst> 组成，其中 <src> 是一个模式（pattern），代表远程版本库中的引用；
 <dst> 是那些远程引用在本地所对应的位置。 + 号告诉 Git 即使在不能快进的情况下也要（强制）更新引用。
 
 默认情况下，引用规格由 git remote add 命令自动生成， Git 获取服务器中 refs/heads/ 下面的所有引用，并将它写入到本地的 refs/remotes/origin/ 中。 所以，如果服务器上有一个 master 分支，我们可以在**本地通过下面这种方式来访问该分支上的提交记录**：
 
-	$ git log origin/master
-	$ git log remotes/origin/master
-	$ git log refs/remotes/origin/master
+    $ git log origin/master
+    $ git log remotes/origin/master
+    $ git log refs/remotes/origin/master
 
 上面的三个命令作用相同，因为 Git 会把它们都扩展成 refs/remotes/origin/master。
 
 **push时遇到的SSH错误**
 
-	Bad configuration option: X11Forwrding 
-	解决办法：注释或删除掉ssh config中的这行
+    Bad configuration option: X11Forwrding 
+    解决办法：注释或删除掉ssh config中的这行
  
 删除之前和SSH关联的origin:
 $ git remote rm origin
  
 **查看当前项目远程分支的路径**
 
-	git remote -v
- 
-## Clone远程库到本地 ##
-
-如果远程库已经准备好了，用命令git clone克隆一个本地库. 注意：该命令要在打算创建本地gitskill库的上一级目录上运行
- 
-    git clone git@github.com:samlin930/gitskills.git 
-	Cloning into 'gitskills'... remote: Counting objects: 3, done. 
-	
-	$ cd gitskills $ ls README.md //可以看到文件已经获取到本地仓库了
- 
-**clone指定的分支**
-
-	git clone -b <branch_name> <remote_repo>
+    git remote -v
 
 
 ## 查看远程库上的提交记录 ##
 
-	git log remotes/origin/master
+    git log remotes/origin/master
 
 origin/master是默认的远程仓库和分支（但它是通过git fetch获取后放在本地的），可以自己改成想看的仓库和想看的分支
 当然如果你的本地很久没有更新过远程仓库的信息了，看到的日志可能就不是最新的
 所以在查看之前需要先运行:
 
-	git fetch 或者git fetch origin
+    git fetch 或者git fetch origin
 
 ## git branch ##
 
-	git branch -avv #查看本地所有的分支 
-		v //显示每一个分支的最后一次提交
-		* master //说明当前处于master分支
+    git branch -avv #查看本地所有的分支 
+        v //显示每一个分支的最后一次提交
+        * master //说明当前处于master分支
 
-	如果想要查看设置的所有跟踪分支, 这会将所有的本地分支列出来并且包含更多的信息，
-	如每一个分支正在跟踪哪个远程分支与本地分支是否是领先、落后或是都有。
-	
-	$ git branch -avv
-	  iss53     7e424c3 [origin/iss53: ahead 2] forgot the brackets
-	  master    1ae2a45 [origin/master] deploying index fix
-	* serverfix f8674d9 [teamone/server-fix-good: ahead 3, behind 1] this should do it
-	  testing   5ea463a trying something new
+    如果想要查看设置的所有跟踪分支, 这会将所有的本地分支列出来并且包含更多的信息，
+    如每一个分支正在跟踪哪个远程分支与本地分支是否是领先、落后或是都有。
+    
+    $ git branch -avv
+      iss53     7e424c3 [origin/iss53: ahead 2] forgot the brackets
+      master    1ae2a45 [origin/master] deploying index fix
+    * serverfix f8674d9 [teamone/server-fix-good: ahead 3, behind 1] this should do it
+      testing   5ea463a trying something new
 
-	这里可以看到 iss53 分支正在跟踪 origin/iss53 并且 “ahead” 是 2，意味着本地有两个提交还没有推送到服务器上。 
-	也能看到 master 分支正在跟踪 origin/master 分支并且是最新的。 
-	接下来可以看到 serverfix 分支正在跟踪 teamone 服务器上的 server-fix-good 分支并且领先 2 落后 1，
-	意味着服务器上有一次提交还没有合并入同时本地有三次提交还没有推送。 最后看到 testing 分支并没有跟踪任何远程分支。
-	
-	需要重点注意的一点是这些数字的值来自于你从每个服务器上最后一次抓取的数据。 
-	如果想要统计最新的领先与落后数字，需要在运行此命令前抓取所有的远程仓库。 
-	可以像这样做：$ git fetch --all; git branch -vv
+    这里可以看到 iss53 分支正在跟踪 origin/iss53 并且 “ahead” 是 2，意味着本地有两个提交还没有推送到服务器上。 
+    也能看到 master 分支正在跟踪 origin/master 分支并且是最新的。 
+    接下来可以看到 serverfix 分支正在跟踪 teamone 服务器上的 server-fix-good 分支并且领先 2 落后 1，
+    意味着服务器上有一次提交还没有合并入同时本地有三次提交还没有推送。 最后看到 testing 分支并没有跟踪任何远程分支。
+    
+    需要重点注意的一点是这些数字的值来自于你从每个服务器上最后一次抓取的数据。 
+    如果想要统计最新的领先与落后数字，需要在运行此命令前抓取所有的远程仓库。 
+    可以像这样做：$ git fetch --all; git branch -vv
 
-	git branch -u origin/serverfix #设置已有的本地分支跟踪一个刚刚拉取下来的远程分支，或者想要修改正在跟踪的上游分支，
-	你可以在任意时间使用 -u 或 --set-upstream-to 选项运行 git branch 来显式地设置。
+    git branch -u origin/serverfix #设置已有的本地分支跟踪一个刚刚拉取下来的远程分支，或者想要修改正在跟踪的上游分支，
+    你可以在任意时间使用 -u 或 --set-upstream-to 选项运行 git branch 来显式地设置。
 
-	git branch  <new_branch>  	#基于当前的分支（HEAD）创建新分支 
-	git branch  -d <new_branch> #删除已经merge到当前分支的分支。 -D //强制删除
-	git branch --merged 		#查看哪些分支已经合并到当前分支
-	git branch --no-merged 		#查看所有包含未合并工作的分支
+    git branch  <new_branch>      #基于当前的分支（HEAD）创建新分支 
+    git branch  -d <new_branch> #删除已经merge到当前分支的分支。 -D //强制删除
+    git branch --merged         #查看哪些分支已经合并到当前分支
+    git branch --no-merged         #查看所有包含未合并工作的分支
 
 ## git merge ##
 
 ### 无冲突的merge ###
 
     git merge origin #如果当前分支在master, 那么是将origin分支上的改动合并到master分支,
-    					结果看起来就像一个新的"合并的提交"(merge commit)
+                        结果看起来就像一个新的"合并的提交"(merge commit)
 
-	英文学习git merge guide:  https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging
-	merge advance: https://git-scm.com/book/en/v2/Git-Tools-Advanced-Merging
+    英文学习git merge guide:  https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging
+    merge advance: https://git-scm.com/book/en/v2/Git-Tools-Advanced-Merging
 
 ### 有冲突的merge ###
 
@@ -399,7 +382,7 @@ origin/master是默认的远程仓库和分支（但它是通过git fetch获取�
     比如你可以通过把这段内容替换为下面这样来解决：
     printf (“test2″);
     在解决了所有文件里的所有冲突后，运行 git add 将把它们标记为已解决（resolved）(因为一旦暂存，就表示冲突已经解决)。
-	然后用 git commit 来完成这次合并提交。
+    然后用 git commit 来完成这次合并提交。
  
 **(2)图形界面方式**
 
@@ -409,7 +392,7 @@ origin/master是默认的远程仓库和分支（但它是通过git fetch获取�
      
     merge tool candidates: kdiff3 tkdiff xxdiff meld gvimdiff opendiff emerge vimdiff
     退出合并工具以后，Git 会询问你合并是否成功。如果回答是，它会为你把相关文件暂存起来，以表明状态为已解决。
-	然后用 git commit 来完成这次合并提交。
+    然后用 git commit 来完成这次合并提交。
 
 ## git rebase ##
 
@@ -425,7 +408,7 @@ git rebase和git merge的区别：　https://www.cnblogs.com/pinefantasy/article
 如果想让"mywork"分支看起来像没有经过任何合并一样，你可以用 git rebase:
 
     $ git checkout mywork
-	$ git rebase origin //将上游分支origin的改动应用到mywork分支
+    $ git rebase origin //将上游分支origin的改动应用到mywork分支
 
     这些命令会把"mywork"分支里的每个提交(commit)取消掉，并且把它们临时保存为补丁(patch)(这些补丁放到".Git/rebase"目录中), 
     然后把"mywork"分支更新到最新的"origin"分支，最后把保存的这些补丁应用到"mywork"分支上。
@@ -433,38 +416,38 @@ git rebase和git merge的区别：　https://www.cnblogs.com/pinefantasy/article
 **解决rebase过程中的冲突后执行： git rebase -- continue**
 
     在rebase的过程中，也许会出现冲突(conflict). 在这种情况，git会停止rebase并会让你去解决冲突.
-	在解决冲突(可以用git mergetool或手动修改方式)后，用:
-	git add 命令去更新这些内容的索引(index)
-	然后只要执行: 
-	git rebase --continue, 这样git会继续应用(apply)余下的补丁,无需执行 git commit. 
-	。
+    在解决冲突(可以用git mergetool或手动修改方式)后，用:
+    git add 命令去更新这些内容的索引(index)
+    然后只要执行: 
+    git rebase --continue, 这样git会继续应用(apply)余下的补丁,无需执行 git commit. 
+    。
 
 **终止rebase： git rebase -- abort**
 
-	用git rebase -- abort来终止rebase的行动，并且mywork分支会回到rebase开始前的状态。
+    用git rebase -- abort来终止rebase的行动，并且mywork分支会回到rebase开始前的状态。
 
 **修改已经commit的message：  git rebase -i**
 
-	首先要git rebase到需要修改message的那个commit的前1个commit。
-	假设commit id是32e0a87f，运行下面的git rebase命令：
+    首先要git rebase到需要修改message的那个commit的前1个commit。
+    假设commit id是32e0a87f，运行下面的git rebase命令：
 
-	git rebase -i 32e0a87f
-	
-	在git bash中运行上面的命令后，会弹出编辑框，在编辑框中会分行依次显示以pick开头的这个commit之后的所有commit message。
-	将需要修改的commit message之前的"pick"改为"reword"，点击保存按钮，并关闭编辑框，这时会执行rebase操作。
-	
-	Rebasing (1/3)
-	
-	接着会再次弹出编辑框，这次编辑框中只有之前改为"reword"的那个commit message，此时修改commit message的内容，
-	点击保存按钮并关闭编辑框，会继续执行rebase操作。 如果操作成功，会出现如下的提示：
+    git rebase -i 32e0a87f
+    
+    在git bash中运行上面的命令后，会弹出编辑框，在编辑框中会分行依次显示以pick开头的这个commit之后的所有commit message。
+    将需要修改的commit message之前的"pick"改为"reword"，点击保存按钮，并关闭编辑框，这时会执行rebase操作。
+    
+    Rebasing (1/3)
+    
+    接着会再次弹出编辑框，这次编辑框中只有之前改为"reword"的那个commit message，此时修改commit message的内容，
+    点击保存按钮并关闭编辑框，会继续执行rebase操作。 如果操作成功，会出现如下的提示：
 
-	[detached HEAD aa3b52c] Add return url
-	 2 files changed, 1 insertion(+), 3 deletions(-)
-	Successfully rebased and updated refs/heads/oss.
+    [detached HEAD aa3b52c] Add return url
+     2 files changed, 1 insertion(+), 3 deletions(-)
+    Successfully rebased and updated refs/heads/oss.
 
-	这样就完成了git commit message的修改，然后强制push一下就搞定了：
+    这样就完成了git commit message的修改，然后强制push一下就搞定了：
 
-	git push --force
+    git push --force
 
 **git rebase --onto** master server client
 
@@ -487,20 +470,20 @@ git cherry-pick 可以将某一个分支中的一个或几个commit(s)来应用�
 例如，假设我们有个稳定版本的分支，叫v2.0，另外还有个开发版本的分支v3.0，
 我们不能直接把两个分支合并，这样会导致稳定版本混乱，但是又想增加一个v3.0 中的功能到v2.0中，这里就可以使用cherry-pick了
 
-	1 先在v3.0中查看要合并的commit的commit id
-	git log 
-	
-	2 切到v2.0中, 假设是 commit f79b0b1ffe445cab6e531260743fa4e08fb4048b 
-	git checkout  v2.0
-	
-	3 合并commit
-	git cherry-pick f79b0b1ffe445cab6e531260743fa4e08fb4048b
+    1 先在v3.0中查看要合并的commit的commit id
+    git log 
+    
+    2 切到v2.0中, 假设是 commit f79b0b1ffe445cab6e531260743fa4e08fb4048b 
+    git checkout  v2.0
+    
+    3 合并commit
+    git cherry-pick f79b0b1ffe445cab6e531260743fa4e08fb4048b
 
 如果发生冲突，会有如下提示：
 
     Automatic cherry-pick failed. After resolving the conflicts, 
-	mark the corrected paths with 'git add <paths>' 
-	or 'git rm <paths>' and commit the result with:  git commit -c 15a2b6c61927e5aed6718de89ad9dafba939a90b
+    mark the corrected paths with 'git add <paths>' 
+    or 'git rm <paths>' and commit the result with:  git commit -c 15a2b6c61927e5aed6718de89ad9dafba939a90b
      
 **按普通方式解决并提交：**
 
@@ -531,22 +514,22 @@ git cherry-pick 可以将某一个分支中的一个或几个commit(s)来应用�
  
 ## git stash ##
 
-	git stash //将新的储藏推送到栈上，运行 git stash 或 git stash save.  用于切换到其它分支工作前，保存未提交的修改
-	git stash save -u "[my message]" //推荐。如果指定 --include-untracked 或 -u 标记，Git 也会储藏任何创建的未跟踪文件。 
-										默认情况下，git stash 只会储藏已经在索引中的文件。
-	git stash list //查看储藏的东西
-	git stash apply //如果想要应用其中一个更旧的储藏，可以通过名字指定它，
-	                  像这样：git stash apply stash@{2}. 如果不指定一个储藏，Git 认为指定的是最近的储藏.
-	git stash pop //要移除的储藏的名字来移除
-	git stash clear //清空Git栈
-	 
-	https://git-scm.com/book/zh/v2/Git-%E5%B7%A5%E5%85%B7-%E5%82%A8%E8%97%8F%E4%B8%8E%E6%B8%85%E7%90%86#_git_stashing
+    git stash //将新的储藏推送到栈上，运行 git stash 或 git stash save.  用于切换到其它分支工作前，保存未提交的修改
+    git stash save -u "[my message]" //推荐。如果指定 --include-untracked 或 -u 标记，Git 也会储藏任何创建的未跟踪文件。 
+                                        默认情况下，git stash 只会储藏已经在索引中的文件。
+    git stash list //查看储藏的东西
+    git stash apply //如果想要应用其中一个更旧的储藏，可以通过名字指定它，
+                      像这样：git stash apply stash@{2}. 如果不指定一个储藏，Git 认为指定的是最近的储藏.
+    git stash pop //要移除的储藏的名字来移除
+    git stash clear //清空Git栈
+     
+    https://git-scm.com/book/zh/v2/Git-%E5%B7%A5%E5%85%B7-%E5%82%A8%E8%97%8F%E4%B8%8E%E6%B8%85%E7%90%86#_git_stashing
 
 ## git tag ##
 
     git tag v1.4-lw  #创建轻量标签
     git tag -a v1.4 -m 'my version 1.4' #创建附注标签
-    git tag -a v1.2 9fceb02  			#后期打标签
+    git tag -a v1.2 9fceb02              #后期打标签
     
     git checkout -b [branchname] [tagname] #在特定的标签上创建一个新分支
 
@@ -558,68 +541,85 @@ git cherry-pick 可以将某一个分支中的一个或几个commit(s)来应用�
     
     $ git blame -L 12,22 simplegit.rb
 
-## git show ##
-
-	git show <commit-id>  //只显示某个commit的改动
-
 ## git grep ##
 
-	git grep –l [keyword]  //查找包括指定文件名关键字的提交
-	                       Regular use is possible in querying, searching file list which included keyword.
-	                       Refer https://git-scm.com/docs/git-grep for explanation regarding Git grep
+    git grep –l [keyword]  //查找包括指定文件名关键字的提交
+                           Regular use is possible in querying, searching file list which included keyword.
+                           Refer https://git-scm.com/docs/git-grep for explanation regarding Git grep
 
+## git init 建立仓库 ##
+
+git init命令把当前目录变成Git可以管理的仓库：
+
+    $ git init
+    Initialized empty Git repository in /Users/michael/learngit/.git/
+
+
+## Clone远程库到本地 ##
+
+如果远程库已经准备好了，用命令git clone克隆一个本地库. 注意：该命令要在打算创建本地gitskill库的上一级目录上运行
+ 
+    git clone git@github.com:samlin930/gitskills.git 
+    Cloning into 'gitskills'... remote: Counting objects: 3, done. 
+    
+    $ cd gitskills $ ls README.md //可以看到文件已经获取到本地仓库了
+ 
+**clone指定的分支**
+
+    git clone -b <branch_name> <remote_repo>
+    
 # 其他 #
 
 ## git config ##
 
-	config 配置有system级别 global（用户级别） 和local（当前仓库）三个 设置先从system-》global-》local  
-	底层配置会覆盖顶层配置 分别使用--system/global/local 可以定位到配置文件
+    config 配置有system级别 global（用户级别） 和local（当前仓库）三个 设置先从system-》global-》local  
+    底层配置会覆盖顶层配置 分别使用--system/global/local 可以定位到配置文件
 
-	查看系统config
-	git config --system --list
-	
-	查看当前用户（global）配置	
-	git config --global  --list
-	
-	查看当前仓库配置信息	
-	git config --local  --list
+    查看系统config
+    git config --system --list
+    
+    查看当前用户（global）配置    
+    git config --global  --list
+    
+    查看当前仓库配置信息    
+    git config --local  --list
 
 ## 设置代理 ##
 
-	设置：
-	git config --global http.proxy http://127.0.0.1:8087
-	git config --global https.proxy https://127.0.0.1:8087
-	
-	#git config --global http.proxy 'socks5://127.0.0.1:8086/proxy.pac' 
-	#git config --global https.proxy 'socks5://127.0.0.1:8086/proxy.pac'
-	
-	取消：
-	git config --global --unset http.proxy
-	git config --global --unset https.proxy
+    设置：
+    git config --global http.proxy http://127.0.0.1:8087
+    git config --global https.proxy https://127.0.0.1:8087
+    
+    #git config --global http.proxy 'socks5://127.0.0.1:8086/proxy.pac' 
+    #git config --global https.proxy 'socks5://127.0.0.1:8086/proxy.pac'
+    
+    取消：
+    git config --global --unset http.proxy
+    git config --global --unset https.proxy
 
 # 设置用户名和email #
 
-	$ git config --global user.name ＂<user name>＂
-	$ git config --global user.email ＂<mail address>“
+    $ git config --global user.name ＂<user name>＂
+    $ git config --global user.email ＂<mail address>“
 
 ## 提示SSL certificate problem ##
 
-	git config --global http.sslVerify false
+    git config --global http.sslVerify false
 
 ## 使用用户名/密码clone ##
 
-	命令： git clone http(s)://username:password@remote
-	
-	例如：用户名 abc@qq.com, 密码是abc123456, git地址：git@xxx.com/www.git, 则：
+    命令： git clone http(s)://username:password@remote
+    
+    例如：用户名 abc@qq.com, 密码是abc123456, git地址：git@xxx.com/www.git, 则：
 
-	git clone http://abc@qq.com:abc123456@git.xxx.com/www.git
+    git clone http://abc@qq.com:abc123456@git.xxx.com/www.git
 
 
 # 参考 #
 
-	1）廖雪峰
-	http://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000
+    1）廖雪峰
+    http://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000
 
-	2）wangjia55的专栏  http://blog.csdn.net/wangjia55/article/category/1334714
+    2）wangjia55的专栏  http://blog.csdn.net/wangjia55/article/category/1334714
 
-	3）git-scm 帮助   https://git-scm.com/docs
+    3）git-scm 帮助   https://git-scm.com/docs
