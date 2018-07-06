@@ -299,6 +299,19 @@
 		sudo apt-get install sshpass
 		sshpass -p "XXX" ssh user@IP
 
+－ ssh/scp免密码的方式
+
+		使用密钥文件.
+
+		假设主机A（192.168.100.3）用来获到主机B（192.168.100.4）的文件。
+		在主机A上执行如下命令来生成配对密钥：
+		ssh-keygen -t rsa
+		遇到提示回车默认即可，公钥被存到用户目录下.ssh目录，比如root存放在：
+		/root/.ssh/id_rsa.pub
+
+		将 .ssh 目录中的 id_rsa.pub 文件复制到 主机B 的 ~/.ssh/ 目录中，并改名为 authorized_keys.
+		这样用scp、ssh命令不需要密码来获取主机B的文件了
+
 - ubuntu国内源
 
 		清华： https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/
@@ -318,21 +331,39 @@
 
 		display pic.png
 
+- 软件安装时遇到缺少依赖时
 
+		sudo apt-get -f install
+
+－　多窗口工具
+
+		sudo apt-get install doublecmd-qt
+
+－　wine
+
+		１）　用wine来装msi
+		wine start xx.msi
+
+		２) wine启动非.exe文件的方法
+		wine start .wine/drive_c/xxl_start_arm_sim.bat
+
+- beyond compare 破解
+
+		https://blog.csdn.net/zmlovelx/article/details/80426035
 
 # VI #
 
-    显示所有行号: set nu
+		显示所有行号: set nu
 
-	复制当前整行： yy, 5yy就是复制5行
-	复制当前光标所在位置到单词尾字符的内容: yw, 2yw就是复制两个单词
-	复制光标所在位置到行尾内容: y$
-	复制光标所在位置到行首内容: y^
-	剪切整行: dd, 如：4dd //剪切4行
-	粘贴缓冲区中的内容: p
-	复制第m行到第n行之间的内容：m,ny
-	撤销所有在前一个编辑行上的操作: U
-	跳转到指定行: 行号
+		复制当前整行： yy, 5yy就是复制5行
+		复制当前光标所在位置到单词尾字符的内容: yw, 2yw就是复制两个单词
+		复制光标所在位置到行尾内容: y$
+		复制光标所在位置到行首内容: y^
+		剪切整行: dd, 如：4dd //剪切4行
+		粘贴缓冲区中的内容: p
+		复制第m行到第n行之间的内容：m,ny
+		撤销所有在前一个编辑行上的操作: U
+		跳转到指定行: 行号
 
 - 如何删除全部内容
 
@@ -361,6 +392,7 @@
 
 		ctrl + W +L  把输入焦点切换到右边的窗口，激活右边的窗口后输入的命令就是针对右窗口了
 		:%!xxd -g 1  切换成十六进制的一个字节的模式
+
 		ctrl + W +H  把输入焦点切换到左边的窗口 
 		:%!xxd -g 1 
 		] + c  查找上一个不同点

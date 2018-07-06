@@ -12,6 +12,10 @@
 
 	5) 更改颜色主题
 	ctrl+k, ctrl+T
+
+	6)关闭右侧的预览界面
+	设置里面搜索 "editor.minimap.enabled":
+	设置为false即可
 	
 # ubuntu上安装火狐中文版 #
 
@@ -191,14 +195,7 @@
 	   - 2
 		  - 3
 			  - 4
-			  
-# utunbu tool #
-
-	1) 多窗口工具
-	sudo apt-get install doublecmd-qt
-
 	
-
 # make #
 
 - $(if CONDITION,THEN-PART[,ELSE-PART])

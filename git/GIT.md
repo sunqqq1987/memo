@@ -6,7 +6,7 @@
     (2) –help选项： 显示完整的用法说明 比如：git diff --help
  
 ## 常用git命令 ##
- 
+
 	1)只显示某个文件的提交
 	git log --pretty=oneline 文件名
 
@@ -16,6 +16,42 @@
 
 	3)查看指定用户的git提交记录
 	git log --author=username --pretty=oneline
+
+	4)查找commit信息中的含指定信息的提交
+	git log --grep=charger
+
+	5)定制要显示的记录格式
+	$ git log --pretty=format:"%h - %ae, %ar : %s" --grep=charger --author=codeaurora.org
+	a68ce5d - 12@codeaurora.com, 3 months ago : drivers: usb: enable floated charger
+
+	git log --pretty=format:"%h - %ae, %cd : %s" --grep=charger --author=xx.com
+	ada5327 - bjzhu@xx.com, Fri Mar 30 04:24:14 2018 +0000 : Merge "drivers: usb: enable floated charger" into andr
+	a68ce5d - bjzhu@xx.com, Fri Mar 30 12:00:02 2018 +0800 : drivers: usb: enable floated charger
+
+	参考：https://blog.csdn.net/c1958/article/details/76128056
+
+	6) 基于远程分支创建本地分支
+	git branch test1 remotes/xx
+	git checkout test1
+
+	如果想删除分支,则：
+	git branch -d test1
+
+
+	7) 撤销本地分支的上一次commit
+	git reset --hard HEAD^  #回退工作区，暂存区以及本地版本到当前版本库里的上一个版本（已经git commit）。
+
+	8）更新远程分支的修改到当前分支
+	方法一：
+	git pull 　　//这可能会发生merge
+	方法２:
+	git rebase   [other branch] //本地修改会在最新的分支基础上，可能会有冲突
+
+
+	9) git commit时修改作者信息
+	git commit -m "xx"  --author="xx <xx@126.com>"
+	注意author部分的格式
+	
  
 ## git init 建立仓库 ##
 git init命令把当前目录变成Git可以管理的仓库：
@@ -227,7 +263,7 @@ Github:  https://github.com
 	
 	git remote show [remote-name] //列出远程仓库的 URL 与跟踪分支的信息
 
-## 将本地库push到远程库 ##
+## git push 将本地库到远程库 ##
 
 	格式：git push [remote-name] [branch-name]//把本地的branch推送到远程库的branch
 
