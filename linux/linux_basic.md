@@ -10,7 +10,8 @@
 	- find 文件/文件夹
 	
 			参考：https://blog.csdn.net/guyongqiangx/article/details/73000434
-	
+				http://man.linuxde.net/find  //find命令
+
 			注意： 带通配符匹配的部分，要加上双引号
 
 		    find /etc -name "*srm*"  //在/etc目录下查找文件名包括srm的文件
