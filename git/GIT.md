@@ -5,7 +5,7 @@
     (1) –h选项: 显示简要用法说明 比如：git diff -h 
     (2) –help选项： 显示完整的用法说明 比如：git diff --help
  
-##常用git命令
+## 常用git命令 ##
  
 	1)只显示某个文件的提交
 	git log --pretty=oneline 文件名
@@ -92,13 +92,24 @@ git init命令把当前目录变成Git可以管理的仓库：
     >
     >" #引号表示多行注释结束
 
-**git commit --amend** 修改最后一次的提交，但不更改已经发布的提交
+**git commit --amend** 修改最后一次的提交
 
-    Change the last commit
-    Don‘t amend published commits!
-    $ git commit --amend
-    如果自上次提交以来你还未做任何修改（例如，在上次提交后马上执行了此命令），那么快照会保持不变，而你所修改的只是提交信息.
-	文本编辑器启动后，可以看到之前的提交信息。 编辑后保存会覆盖原来的提交信息.
+	一、如果已经push到远端服务器，想修改已经提交过的commit信息  
+	1.保存:Ctrl + o; 回车 ;退出:Ctrl + x   
+	# git commit --amend  
+
+	2.重新提交gerrit审批  
+	# git push --no-thin origin HEAD:refs/for/master  
+
+	二、如果已经push到远端服务器,有漏掉的test.txt文件想提交到上一次的commit信息  
+	1.添加test.txt  
+	# git add test.txt
+
+	2.修改commit信息;保存:Ctrl + o; 回车 ;退出:Ctrl + x   
+	# git commit --amend 
+
+	3.重新push到远端服务器  
+	# git push --no-thin origin HEAD:refs/for/master 
 
 ## git log -> reflog -> reset 回退版本库的版本或暂存区的修改 ##
 
@@ -107,7 +118,7 @@ git init命令把当前目录变成Git可以管理的仓库：
 	git log --pretty=oneline  	#只简要的显示一行
 	git log --stat 				#按commit显示每个commit所改动的文件
 	 
-	git log -p -2 			#-p 选项展开显示每次提交的差异，-2 表示仅显示最近的两次提交的差异，否则显示所有提交的差异。
+	git log -p -2 　#-p 选项展开显示每次提交的差异，-2 表示仅显示最近的两次提交的差异，否则显示所有提交的差异。
 	git log –p --full-diff  #当指定路径，除路径外的文件的不同也显示出来
 	git log -p --since="Tue Jul 25 21:15:04 2017 +0800" #获取指定日期后的提交
 
@@ -121,12 +132,12 @@ git init命令把当前目录变成Git可以管理的仓库：
 
 **git reset** （前提是没有推送到远程库）回退文件到当前版本库的某个版本或撤销暂存区的修改。
     
-    git reset --hard HEAD^  	#回退工作区，暂存区以及本地版本到当前版本库里的上一个版本（已经git commit）。
+    	git reset --hard HEAD^  #回退工作区，暂存区以及本地版本到当前版本库里的上一个版本（已经git commit）。
     	HEAD表示当前版本，也就是最新的提交commit id:3628164...882e1e0，
-		上一个版本就是HEAD^，上上一个版本就是HEAD^^，当然往上100个版本写100个^比较容易数不过来，所以写成HEAD~100。
+	上一个版本就是HEAD^，上上一个版本就是HEAD^^，当然往上100个版本写100个^比较容易数不过来，所以写成HEAD~100。
 
-    git reset --hard 3628164  	#回退到指定的commit id 版本
-    git reset HEAD file 	#撤销暂存区的修改（变为unstage状态），重新放回工作区.
+    	git reset --hard 3628164  #回退到指定的commit id 版本
+    	git reset HEAD file 	#撤销暂存区的修改（变为unstage状态），重新放回工作区.
 
 	git reset               //撤消所有 git add（即撤销暂存区里的改动）
 	git reset hello.c       //撤消所有 git add hello.c
@@ -362,6 +373,8 @@ origin/master是默认的远程仓库和分支（但它是通过git fetch获取�
 
 ## git rebase ##
 
+git rebase和git merge的区别：　https://www.cnblogs.com/pinefantasy/articles/6287147.html
+
 ### 原则 ###
 
     1）只对尚未推送或分享给别人的本地修改执行变基操作清理历史，从不对已推送至别处的提交执行变基操作。
@@ -379,10 +392,12 @@ origin/master是默认的远程仓库和分支（但它是通过git fetch获取�
 
 **解决rebase过程中的冲突后执行： git rebase -- continue**
 
-    在rebase的过程中，也许会出现冲突(conflict). 在这种情况，git会停止rebase并会让你去解决冲突；
-	在解决冲突(可以用git mergetool或手动修改方式)后，用"git add"命令去更新这些内容的索引(index), 
-	然后只要执行: git rebase –continue, 无需执行 git commit. 
-	这样git会继续应用(apply)余下的补丁。
+    在rebase的过程中，也许会出现冲突(conflict). 在这种情况，git会停止rebase并会让你去解决冲突.
+	在解决冲突(可以用git mergetool或手动修改方式)后，用:
+	git add 命令去更新这些内容的索引(index)
+	然后只要执行: 
+	git rebase --continue, 这样git会继续应用(apply)余下的补丁,无需执行 git commit. 
+	。
 
 **终止rebase： git rebase -- abort**
 

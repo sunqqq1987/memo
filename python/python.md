@@ -24,6 +24,81 @@
 
 - 参考：http://www.runoob.com/python/python-func-zip.html
 
+- struct模块
+
+    	参考：　https://www.cnblogs.com/hushaojun/p/6489350.html
+
+		pack、unpack、pack_into、unpack_from函数
+
+		#!/usr/bin/env python  
+		#encoding: utf8  
+
+		import sys  
+		reload(sys)  
+		sys.setdefaultencoding("utf-8")  
+		
+		import struct  
+		
+		a = 20  
+		b = 400   
+		
+		# pack  
+		str = struct.pack("ii", a, b)  
+		print 'length: ', len(str)          # length:  8  
+		print str                           # 乱码：   
+		print repr(str)                     # '\x14\x00\x00\x00\x90\x01\x00\x00'  
+		
+		# unpack  
+		str2 = struct.unpack("ii", str)  
+		print 'length: ', len(str2)          # length:  2  
+		print str2                           # (20, 400)  
+		print repr(str2)                     # (20, 400)
+
+		＃calcsize
+		print "len: ", struct.calcsize('i')       # len:  4  
+		print "len: ", struct.calcsize('ii')      # len:  8  
+		print "len: ", struct.calcsize('f')       # len:  4  
+		print "len: ", struct.calcsize('ff')      # len:  8  
+		print "len: ", struct.calcsize('s')       # len:  1  
+		print "len: ", struct.calcsize('ss')      # len:  2  
+		print "len: ", struct.calcsize('d')       # len:  8  
+		print "len: ", struct.calcsize('dd')      # len:  16
+
+		＃pack_into，unpack_from
+		from ctypes import create_string_buffer  
+  
+		buf = create_string_buffer(12)  
+		print repr(buf.raw)     # '\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'  
+		
+		struct.pack_into("iii", buf, 0, 1, 2, -1)  
+		print repr(buf.raw)     # '\x01\x00\x00\x00\x02\x00\x00\x00\xff\xff\xff\xff'  
+		
+		print struct.unpack_from("iii", buf, 0)     # (1, 2, -1)
+
+		＃struct 类型表
+		Format	C Type	Python type	Standard size	Notes
+		x 	pad byte 	no value 	  	 
+		c 	char 	string of length 1 	1 	 
+		b 	signed char 	integer 	1 	(3)
+		B 	unsigned char 	integer 	1 	(3)
+		? 	_Bool 	bool 	1 	(1)
+		h 	short 	integer 	2 	(3)
+		H 	unsigned short 	integer 	2 	(3)
+		i 	int 	integer 	4 	(3)
+		I 	unsigned int 	integer 	4 	(3)
+		l 	long 	integer 	4 	(3)
+		L 	unsigned long 	integer 	4 	(3)
+		q 	long long 	integer 	8 	(2), (3)
+		Q 	unsigned long long 	integer 	8 	(2), (3)
+		f 	float 	float 	4 	(4)
+		d 	double 	float 	8 	(4)
+		s 	char[] 	string 	1 	 
+		p 	char[] 	string 	  	 
+		P 	void * 	integer 	  	(5), (3)
+
+
+
+
 - Couter类
 
 		Counter类的目的是用来跟踪值出现的次数。它是一个无序的容器类型，以字典的键值对形式存储，其中元素作为key，其计数作为value。
@@ -62,9 +137,9 @@
 
 	http://www.runoob.com/python/python-dictionary.html
 
-# 字符串截取 #
+# 字符串截取 （用括号）#
     
-    str = ’0123456789′
+    str = '0123456789′
     print str[0:3] 		#截取第一位到第三位的字符
     print str[:] 		#截取字符串的全部字符
     print str[6:] 		#截取第七个字符到结尾

@@ -1,8 +1,13 @@
 # 命令 #
 
+- 自动输入sudo密码
+
+		echo password | sudo -S shutdown -h now //立刻关机；如果用1表示1分钟后关机
+		参数-S,这个参数是让sudo从标准输入流读取而不是终端设备
+
 - 查找
 
-	- find文件/文件夹
+	- find 文件/文件夹
 	
 			参考：https://blog.csdn.net/guyongqiangx/article/details/73000434
 	
@@ -26,6 +31,14 @@
 			-a/-o  //多个条件合并查找
 			-prune //指定排除查找的条件
 			
+			查找最近修改过的文件:
+			find ./ -mtime 0：返回最近24小时内修改过的文件。
+			find ./ -mtime 1 ： 返回的是前48~24小时修改过的文件。
+			那怎么返回2天内修改过的文件？find还可以支持表达式关系运算，所以可以把最近几天的数据一天天的加起来：
+			find ./ -mtime 0 -o -mtime 1 
+
+			另外， -mmin参数-cmin / - amin也是类似的。
+			
 
 	- grep内容
 
@@ -46,8 +59,8 @@
 
 - 查看大小
 
-    	df -h //查看每个文件系统对应的分区的使用情况
-   		du -h //查看各文件/文件夹的大小. 它会遍历每个文件、文件夹的方式显示， 但文件夹的大小是不准确的
+		df -h //查看每个文件系统对应的分区的使用情况
+		du -h //查看各文件/文件夹的大小. 它会遍历每个文件、文件夹的方式显示， 但文件夹的大小是不准确的
 		ls -lh //类型du -h, 只是显示方式不一样
 		
 
@@ -93,6 +106,11 @@
 - cp 拷贝指定的目录
 
     	cp -r s/c  d/   #d目录变成d/c, 注意要加-r
+
+- scp 拷贝远程服务器上的文件到本地
+
+		拷贝远程服务器192.168.1.112的目录/tmp/test到当前目录下。
+		[root@CentOS_Test_Server tmp]# scp -r root@192.168.1.112:/tmp/test ./
 
 - 删除指定文件(夹)外的文件(夹)
 
@@ -263,13 +281,23 @@
 
 - 添加用户
 
-	    一般linux创建用户的方法，但是ubuntu发行版本有另外的方法
+	    一般linux创建用户的方法如下，
 	    sudo useradd samlin930_smb
 	    sudo useradd samlin930_smb
 	    sudo userdel samlin930_smb
 	    
-	    ubuntu下添加用户：
+	    但是ubuntu发行版本有另外的方法：
 	    sudo adduser samlin930_smb
+		然后按提示输入root用户密码和新建账户的密码
+
+- 修改密码
+
+		passwd username1
+
+- ssh带密码登录远程主机
+
+		sudo apt-get install sshpass
+		sshpass -p "XXX" ssh user@IP
 
 - ubuntu国内源
 
@@ -290,6 +318,8 @@
 
 		display pic.png
 
+
+
 # VI #
 
     显示所有行号: set nu
@@ -309,3 +339,29 @@
 		在命令模式下，输入 .,$d   ，一回车就全没了。
 		表示从当前行到末行全部删除掉。
 		用gg表示移动到首行。
+
+
+- vim 查看二进制
+
+		方法１：vim
+		vim -b egenea-base.ko   加上-b参数，以二进制打开
+		然后输入命令  :%!xxd -g 1  切换到十六进制模式显示
+
+		方法２：hexdump
+		apt-get install libdata-hexdumper-perl
+		安装好之后就可以直接hexdump your_binary_file
+		也可以直接使用hd命令来代替hexdump
+		如果想要慢慢看 ： hd your_binary_file | more
+
+－　vimdiff 比较两个二进制文件
+
+		vim -bd base.ko base2.ko
+
+		打开后就可以在两个窗口里面显示两个文件
+
+		ctrl + W +L  把输入焦点切换到右边的窗口，激活右边的窗口后输入的命令就是针对右窗口了
+		:%!xxd -g 1  切换成十六进制的一个字节的模式
+		ctrl + W +H  把输入焦点切换到左边的窗口 
+		:%!xxd -g 1 
+		] + c  查找上一个不同点
+		[ + c  查找下一个不同点

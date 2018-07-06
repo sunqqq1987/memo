@@ -10,6 +10,9 @@
 
 	4) ctrl+ -/+ 进行字体缩放
 
+	5) 更改颜色主题
+	ctrl+k, ctrl+T
+	
 # ubuntu上安装火狐中文版 #
 
 	https://blog.csdn.net/qq_37772981/article/details/79943848
@@ -189,6 +192,12 @@
 		  - 3
 			  - 4
 			  
+# utunbu tool #
+
+	1) 多窗口工具
+	sudo apt-get install doublecmd-qt
+
+	
 
 # make #
 
