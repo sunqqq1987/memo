@@ -54,23 +54,24 @@
 	
  
 ## git init 建立仓库 ##
+
 git init命令把当前目录变成Git可以管理的仓库：
 
     $ git init
     Initialized empty Git repository in /Users/michael/learngit/.git/
 
-## 11 ##
-
 ## git diff ##
+
     (1) 三种比较方式
-    $ git diff 			#比较工作树与暂存区 
-	$ git diff --cached #比较暂存区与分支中最后一次提交（HEAD） 
-	$ git diff HEAD 	#比较仓库中最后一次提交与工作树
+    $ git diff 			 #比较工作树与 暂存区
+	$ git diff HEAD 	 #比较工作树与 当前分支中最后一次提交(HEAD)
+	$ git diff --cached  #比较暂存区与 当前分支中最后一次提交(HEAD） 
+	
      
     (2) 任意比较
-    $ git diff test  			#当前分支与test 分支比较 
-	$ git diff HEAD -- ./test 	#比较当前分支的HEAD与工作树中的test文件 
-	$ git diff  HEAD^  HEAD 	#比较当前分支的最后两次提交
+    $ git diff test  			#比较当前分支与 test分支
+	$ git diff HEAD -- ./test 	#比较当前分支最后一次提交与 工作树中的test文件 
+	$ git diff HEAD^  HEAD 	#比较当前分支的最后两次提交
      
     (3) 比较分支
     $ git diff topic master 	#比较topic和master分支的HEAD 
@@ -82,7 +83,7 @@ git init命令把当前目录变成Git可以管理的仓库：
 	$ git diff --name-status  				#只显示名称和更改的性质, 而不是实际的 diff 输出。 
 	$ git diff arch/i386 include/asm-i386 	#将比较输出限制为子树 $ git diff –R 逆序输出差异
      
-	(5) 查看仓库中两个commit id间的改动
+	(5) 查看当前分支中的两个commit id间的改动
     git diff commit-id-1 commit-id-2  >> diff.txt  	#将2个commit间的不同 输出到文件 
 	git diff commit-id-1 commit-id-2 -- readme.txt  #具体某个文件的commit间的变更
     
@@ -151,13 +152,14 @@ git init命令把当前目录变成Git可以管理的仓库：
 
 ## git log -> reflog -> reset 回退版本库的版本或暂存区的修改 ##
 
-**git log** 只显示当前版本库里的所有提交记录. 可以用来确定要回退到以前哪个版本。
+**git log** 只显示当前版本库里的所有提交记录的修改. 可以用来确定要回退到以前哪个版本。
 
-	git log --pretty=oneline  	#只简要的显示一行
+	git log --pretty=oneline  	#只简要地显示一行
 	git log --stat 				#按commit显示每个commit所改动的文件
 	 
 	git log -p -2 　#-p 选项展开显示每次提交的差异，-2 表示仅显示最近的两次提交的差异，否则显示所有提交的差异。
 	git log –p --full-diff  #当指定路径，除路径外的文件的不同也显示出来
+
 	git log -p --since="Tue Jul 25 21:15:04 2017 +0800" #获取指定日期后的提交
 
 	git log -p --since=2.weeks : Check the info limited till 2 weeks before from current 
