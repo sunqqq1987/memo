@@ -60,18 +60,17 @@
             解压后得到的 AOSP 工程目录. 
             这时 ls 的话什么也看不到，因为只有一个隐藏的 .repo 目录
 
-            repo sync -j16 //正常同步一遍即可得到完整目录
+            repo sync -j8 //正常同步一遍即可得到完整目录
 
         方法2： 用repo下载
 
         1）获取指定branch
-        
         否则下载的代码库会很大，所有的android分支可以从这里查看： https://source.android.com/source/build-numbers.html#source-code-tags-and-builds
 
         //repo init -u https://aosp.tuna.tsinghua.edu.cn/platform/manifest -b android-8.1.0_r2
         repo init -u https://aosp.tuna.tsinghua.edu.cn/platform/manifest -b android-wear-8.0.0_r1
 
-        2）获取最新代码： repo sync -j16 
+        2）获取最新代码： repo sync -j8 
 
 - 5.编译
 

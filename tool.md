@@ -90,6 +90,8 @@
 －　wine
 
         1) 安装wine
+        
+
 
         2）用wine来装msi
         wine start xx.msi
@@ -297,7 +299,7 @@
     在本地服务找到diagnostics tracking service服务，双击打开，停止该服务并且设置启动类型为禁用，
     提示“恢复”标签，一栏中的“重新启动该服务”选项应该改为“无操作”
 
-# sourceinsight #
+# source insight #
 
     创建一个Custom Command: ShellExecute open %d. 然后关联一个快捷键。
     或者 explorer /select,%f
