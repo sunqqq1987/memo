@@ -1,3 +1,107 @@
+# ubuntu #
+
+- 安装火狐中文版
+
+        https://blog.csdn.net/qq_37772981/article/details/79943848
+
+- 设置代理
+
+        1）临时设置
+        在终端中输入命令：
+        export HTTP_PROXY="http://usr:pwd@proxy_IP:PORT"
+        export HTTPS_PROXY="https://usr:pwd@proxy_IP:PORT"
+
+- 查看ubuntu的版本
+
+        cat /etc/issue
+        
+- 查看ubuntu系统是32位还是64位
+
+        uname -m
+        
+- ubuntu自带VI编辑器不好用
+
+        Ubuntu预安装的是tiny版本，我们要安装vim的full版本。
+        首先，先卸掉旧版的vi：
+
+        sudo apt-get remove vim-common
+        sudo apt-get install vim
+
+- 添加用户
+
+        一般linux创建用户的方法如下，
+        sudo useradd samlin930_smb
+        sudo useradd samlin930_smb
+        sudo userdel samlin930_smb
+        
+        但是ubuntu发行版本有另外的方法：
+        sudo adduser samlin930_smb
+        然后按提示输入root用户密码和新建账户的密码
+
+- 修改密码
+
+        passwd username1
+
+- ssh带密码登录远程主机
+
+        sudo apt-get install sshpass
+        sshpass -p "XXX" ssh user@IP
+
+－ ssh/scp免密码的方式
+
+        使用密钥文件.
+
+        假设主机A（192.168.100.3）用来获到主机B（192.168.100.4）的文件。
+        在主机A上执行如下命令来生成配对密钥：
+        ssh-keygen -t rsa
+        遇到提示回车默认即可，公钥被存到用户目录下.ssh目录，比如root存放在：
+        /root/.ssh/id_rsa.pub
+
+        将 .ssh 目录中的 id_rsa.pub 文件复制到 主机B 的 ~/.ssh/ 目录中，并改名为 authorized_keys.
+        这样用scp、ssh命令不需要密码来获取主机B的文件了
+
+- 使用国内源
+
+        清华： https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/
+        其他： https://www.linuxidc.com/Linux/2017-01/139458.htm
+
+- SSH连接vmware虚拟机
+
+        apt-get install openssh-server
+
+- vm-tool不能安装，且不能复制到虚拟机
+
+        1）卸载sudo apt-get remove open-vm-tools 
+        2）重新安装sudo apt-get install open-vm-tools-desktop
+        3）sudo reboot
+
+- 看图片
+
+        display pic.png
+
+- 软件安装时遇到缺少依赖
+
+        sudo apt-get -f install
+
+－　多窗口工具
+
+        sudo apt-get install doublecmd-qt
+
+－　wine
+
+        1) 安装wine
+
+        2）用wine来装msi
+        wine start xx.msi
+
+        3) wine启动非exe的方法
+        wine start .wine/drive_c/xxl_start_arm_sim.bat
+
+- beyond compare 破解
+
+        https://blog.csdn.net/zmlovelx/article/details/80426035
+
+
 # vscode #
 
     1）从 https://code.visualstudio.com/Download 下载deb包 进行安装
@@ -23,10 +127,6 @@
     8)tab用4个空格代替
     使用： "editor.detectIndentation": false
     
-# ubuntu上安装火狐中文版 #
-
-    https://blog.csdn.net/qq_37772981/article/details/79943848
-
 # 1 ATOM #
 
 - 快捷键
@@ -65,6 +165,21 @@
         Use F3 and Shift+F3:     keys to navigate through highlighted usages
         Ctrl+E:                    (View | Recent Files) brings a popup list of the recently visited files
         Ctrl+空格:      using basic code completion
+
+# xx-net #
+
+    1）开启ipv6
+    https://github.com/XX-net/XX-Net/wiki/IPv6-Linux
+
+    sudo miredo
+
+    2）参考以下进行linux系统的相关设置
+    https://github.com/XX-net/XX-Net/wiki/How-to-use
+
+    ./start
+    
+    3)部署个人APP ID
+
 
 # 3 IPV6 Teredo隧道 #
 
