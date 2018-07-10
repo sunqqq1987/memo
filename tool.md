@@ -90,7 +90,7 @@
 －　wine
 
         1) 安装wine
-        
+        参考： https://wiki.winehq.org/Ubuntu
 
 
         2）用wine来装msi
@@ -106,6 +106,8 @@
 
 # vscode #
 
+    帮助文档：https://code.visualstudio.com/docs/getstarted/tips-and-tricks
+    
     1）从 https://code.visualstudio.com/Download 下载deb包 进行安装
 
     2）安装preview 插件：Markdown Preview Enhanced
@@ -128,6 +130,32 @@
 
     8)tab用4个空格代替
     使用： "editor.detectIndentation": false
+
+    9)显示终端
+    ctrl+shift+M
+
+    10)在最近打开的文件间切换
+    Navigate entire history:  +Tab
+
+    11）导航到打开的文件
+    Ctrl+P
+
+    12)选择一个单词
+    Ctrl+D 
+
+    13）选择列
+    按住Shift+Alt后拖动鼠标
+
+    14）选择一行
+    Shift+Alt+Right
+
+    15) 选择多行
+    按shift后点击鼠标
+
+    
+
+
+
     
 # 1 ATOM #
 
@@ -301,7 +329,17 @@
 
 # source insight #
 
-    创建一个Custom Command: ShellExecute open %d. 然后关联一个快捷键。
+    1)下载 3.5 版本
+    https://www.sourceinsight.com/download/
+
+    注册码：
+    SI3US-205035-36448
+    SI3US-466908-65897
+    SI3US-368932-59383
+    SI3US-065458-30661
+    SI3US-759512-70207
+
+    2)创建一个Custom Command: ShellExecute open %d. 然后关联一个快捷键。
     或者 explorer /select,%f
 
 

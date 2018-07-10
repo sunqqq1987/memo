@@ -1,4 +1,4 @@
-# android 源码下载和编译 #
+# aosp 源码下载和编译 #
 
     参考
     https://www.jianshu.com/p/367f0886e62b
@@ -148,3 +148,8 @@
         source build/envsetup.sh
         lunch aosp_arm64-eng
         emulator
+
+# kernel common #
+
+    git clone https://android.googlesource.com/kernel/common
+    => git clone https://aosp.tuna.tsinghua.edu.cn/kernel/common
