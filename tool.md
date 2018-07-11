@@ -125,7 +125,7 @@
     设置里面搜索 "editor.minimap.enabled":
     设置为false即可
 
-    7)以点的方式显示空格：
+    7)以点的方式显示空格
     使用选项："editor.renderWhitespace": "all"
 
     8)tab用4个空格代替
@@ -134,28 +134,37 @@
     9)显示终端
     ctrl+shift+M
 
-    10)在最近打开的文件间切换
-    Navigate entire history:  +Tab
+    10)文件和修改处的跳转
+        在最近打开的文件间切换
+        Navigate entire history:  Ctrl+Tab
 
-    11）导航到打开的文件
-    Ctrl+P
+        导航到打开的文件
+        Ctrl+P
 
-    12)选择一个单词
-    Ctrl+D 
+        最近修改地方间的跳转
+        Navigate back:      Ctrl+Alt+-
+        Navigate forward:   Ctrl+Shift+-
 
-    13）选择列
-    按住Shift+Alt后拖动鼠标
+    11)选择
+        选择一个单词
+        Ctrl+D
 
-    14）选择一行
-    Shift+Alt+Right
+        选择一行
+        Shift+Alt+Right
 
-    15) 选择多行
-    按shift后点击鼠标
+        选择多行
+        按shift后点击鼠标
 
-    
+        选择列
+        按住Shift+Alt后拖动鼠标
 
+    12)查找
+        查找文件
+        ctr+p 后输入部分文件名
 
+        
 
+   
     
 # 1 ATOM #
 
