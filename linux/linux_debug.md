@@ -15,6 +15,14 @@
 
 - 用printk 输出log
 
+    - 打印boot时间
+    
+        ktime_t　wakeup_ktime = ktime_get_boottime();
+
+    - 打印 文件名 函数名 行号
+
+        printk("%s %s %d \n",__FILE__,__FUNCTION__,__LINE__); 
+
 	- 只有提供一个结尾的新行给printk，才会刷行
 	
 	- 打印设备号

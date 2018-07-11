@@ -342,6 +342,8 @@
     2)创建一个Custom Command: ShellExecute open %d. 然后关联一个快捷键。
     或者 explorer /select,%f
 
+    3.50.0058(或60),注册码是SI3US-361500-17409
+
 
 # ultraedit #
 

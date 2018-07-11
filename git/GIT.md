@@ -52,6 +52,9 @@
     git commit -m "xx"  --author="xx <xx@126.com>"
     注意author部分的格式
     
+
+    10) 获得某个目录下的commit
+    git log --pretty --stat . >~/xxl/study/charger/FG_commits.txt
  
 ## git diff ##
 
