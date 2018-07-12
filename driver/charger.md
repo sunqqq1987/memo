@@ -4,6 +4,20 @@
 Hi-Z: 高阻, 它表示没有任何驱动的输出信号状态，该信号处于开路状态，既不是高电平也不是低电平。
 电路分析时高阻态可做开路理解。你可以把它看作输出（输入）电阻非常大。他的极限可以认为悬空。
 
+latched： 被锁定
+trip points:跳闸点
+
+“Wall adapter” (dedicated charging port)
+
+Automatic Power Source Detection (APSD) algorithm
+
+four power source types that are detected are:
+1. Standard Downstream Port (SDP) //limited to 100 mA
+2. Charging Downstream Port (CDP) //higher than 500 mA
+3. Dedicated Charging Port (DCP)  //higher than 500 mA
+4. Other charging port (not covered by USB charging specification 1.1)
+
+
 battery drain 电池耗竭，即soc=0了
 
 OCV是Open circuit voltage=开路电压,指的是电池不放电开路时,两极之间的电位差
@@ -73,7 +87,7 @@ If the battery voltage is below 2.1 V (trickle-charge to pre-charge threshold), 
 apply a trickle-charge current of 22 mA (typical). This allows the SMB23x family to reset the
 protection circuit in the battery pack and bring the battery voltage to a higher level without　compromising safety
 
-有个timer, 在这个timer周期内必须到达下一阶段的电压？.如果没有达到则发生错误
+有个pre-charge timer, 在这个timer周期内必须到达下一阶段的电压.如果没有达到则发生错误
 
 2.进入pre-charge的阈值是2.1v
 Pre-charge current (30 mA) versus battery voltage（2.1v~2.9v).
@@ -83,7 +97,7 @@ datasheet: pre-charge电压的４个级别：2.5,2.6,2.8,3.0，对应的充电�
 The preconditioning current is programmable, with the default value at C/10.
 If the battery voltage does not reach the preconditioning voltage level (programmable) within a
 specified amount of time (pre-charge timeout), the safety timer expires and the charge cycle is　terminated
-=>有个timer确保会升到一个pre-charge电压
+=>pre-charge timer内确保会升到fast-charge的阈值
 
 3. 进入fast-charge的阈值是3.0v，然后进行恒流充电，直到到达float volatage(4.2v)
 Fast-charge current (0.5 A) versus battery voltage(2.6v~4.2v)
@@ -109,14 +123,29 @@ After the charge cycle has terminated, the SMB23x family continues to monitor th
 If the battery voltage falls below the recharge threshold (programmable), 
 the SMB23x family can automatically top-off the battery ？.
 
+--------input current limit-------------
 
+input Current Limit Mode(输入电流限制模式)：设定的范围是100ma~1500ma
 
-input Current Limit Mode(输入电流限制模式)：
+    USB2.0时，
     USB1: 通过usb进行最大１００ma的充电.　datasheet:80ma~100ma, ９０（typ)
     USB5: 对应最大５００ma. datasheet: 475ma(typ)或275ma(typ)
+    
+    USB3.0时，
     INUSB1.5: 135ma(typ)
     INUSB9: 860ma(typ)
+
     AC充电: 指(AICL Algorithm　or Default Setting): 充电电流９０ma～１０００ma
+
+----------pins------------------------
+INOK output: indicate valid input adapter presence (V_IN > V_UVLO , V_IN < V_OVLO ).
+
+SUSP is a logic input pin for turning on/off the device’s operation (including I 2 C interface)
+
+------------------------------------------
+
+
+
 
 I_TERM: Four steps: 20 mA, 30 mA, 50 mA, 75 mA
 
@@ -173,6 +202,24 @@ I_INLIMIT = Programmed Input Current Limit　//充电芯片的输入电流限制
 
 ------------------battery missing检查----------------
 
+Once the BATT pin has reached 2.1 V, the OUT pin will begin charging the BATT pin with the programmed pre-charge
+current and the battery missing timer will begin. 
+If the BATT pin is charged up above the “missing battery” voltage level before the expiration of the battery missing timer, the SMB23x
+family will assert the missing battery status flag and the IRQ (if enabled).
+
+
+-----------------Enabling/disabling charging-------
+When the charger is disabled, the FET connecting the system (SYS) to the battery (OUT) will remain on.
+
+---------------thermal monitor---------------
+If the temperature limits are exceeded, battery charging will be suspended and
+safety timers maintain their values but are paused. During this mode, the FET between the battery
+and the system is turned on for the system to be powered by the battery. Charging is
+automatically re-enabled, the corresponding fault bit is reset, and safety timers continue counting
+once temperature level has returned within the safe operating range(with some hysteresis).
+
+A device option also exists for notifying the
+system of a battery thermal condition, without suspending battery charging.
 
 
 
