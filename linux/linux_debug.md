@@ -15,6 +15,12 @@
 
 - 用printk 输出log
 
+    - 打印指针
+
+        打印裸指针(raw pointer)用 %p
+        %pF可打印函数指针的函数名和偏移地址
+        %pf只打印函数指针的函数名，不打印偏移地址
+
     - 打印boot时间
     
         ktime_t　wakeup_ktime = ktime_get_boottime();

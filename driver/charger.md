@@ -5,6 +5,9 @@ Hi-Z: 高阻, 它表示没有任何驱动的输出信号状态，该信号处于
 
 latched： 被锁定
 trip points:跳闸点
+sbc:  linear battery charger
+inhibit: 抑制
+taper: 逐渐变细
 
 “Wall adapter” (dedicated charging port)
 
@@ -60,6 +63,10 @@ or directly use the voltage present at the input (programmable option).
 
 
 Auto-Power Source Detection Enabled ?
+
+INOK interrupt is used to indicate valid input adapter presence,
+enable it in suspend to make sure USB insertion and removal could
+be detected after device suspended.
 
 -----------charging------------
 

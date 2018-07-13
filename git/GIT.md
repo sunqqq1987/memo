@@ -28,6 +28,9 @@
     ada5327 - bjzhu@xx.com, Fri Mar 30 04:24:14 2018 +0000 : Merge "drivers: usb: enable floated charger" into andr
     a68ce5d - bjzhu@xx.com, Fri Mar 30 12:00:02 2018 +0800 : drivers: usb: enable floated charger
 
+    //显示当前目录下的改动，包括改动的文件
+    git log --pretty=format:"%h - %ae, %cd : %s" --grep=charger --author=xx.com --stat .
+
     参考：https://blog.csdn.net/c1958/article/details/76128056
 
     6) 基于远程分支创建本地分支
