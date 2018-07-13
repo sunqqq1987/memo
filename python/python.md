@@ -243,6 +243,12 @@ http://www.runoob.com/python/python-reg-expressions.html
 
 # pip #
 
+- 安装pip3
+
+        sudo apt-get install python3-pip
+
+        sudo pip3 install pycrypto  //pip3方式安装pycrypto包
+
 - **命令**
 
 	    # 安装模块

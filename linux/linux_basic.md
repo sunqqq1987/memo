@@ -305,3 +305,30 @@
 		:%!xxd -g 1 
 		] + c  查找上一个不同点
 		[ + c  查找下一个不同点
+
+# shell #
+
+-echo
+
+        参考： https://jingyan.baidu.com/article/da1091fb1620a2027949d642.html
+
+        echo后的单引号表示强引用，单引号里面是什么就输出什么，而双引号是弱引用，变量的值会代替变量名输出。
+
+        如果变量与其它字符相连的话，需要使用大括号（{ }）
+        如：echo "${year}-${mouth}-${day}"
+
+        如果要不换行显示，可以加参数 -n，它就会忽略当前行的换行符
+        如：
+        echo -n "guoke!"
+        echo "Hello World!"
+
+        原样输出字符串,若需要原样输出字符串（不进行转义），请使用单引号。
+        如
+        name="guoke"
+        echo '$name\"'
+        => guoke\"
+
+        显示命令执行结果，这里用的是反绰号
+        如：
+        echo `pwd`
+        =>/root
