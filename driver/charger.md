@@ -1,4 +1,3 @@
-
 ==========基本概念================
 
 Hi-Z: 高阻, 它表示没有任何驱动的输出信号状态，该信号处于开路状态，既不是高电平也不是低电平。
@@ -88,6 +87,9 @@ apply a trickle-charge current of 22 mA (typical). This allows the SMB23x family
 protection circuit in the battery pack and bring the battery voltage to a higher level without　compromising safety
 
 有个pre-charge timer, 在这个timer周期内必须到达下一阶段的电压.如果没有达到则发生错误
+If the trickle-charge to pre-charge voltage threshold is not exceeded before
+the pre-charge timer expires, the charge cycle is terminated, both FETs are turned off and power
+recycling is necessary for re-initiating charging.
 
 2.进入pre-charge的阈值是2.1v
 Pre-charge current (30 mA) versus battery voltage（2.1v~2.9v).
@@ -159,7 +161,8 @@ Input current (900 mA) versus battery voltage(2.5v~3.7v)
 
 Float voltage (4.2 V)
 
-UVLO threshold ?
+UVLO threshold (<3.5v)
+ovlo threshold (>6.2v)
 
 V_BAT <V_TRICKLE
 V_BATT = Battery Voltage
@@ -175,6 +178,10 @@ parameters can also be programmed statically via a user-friendly GUI interface:
 ■ Battery pack temperature
 
 V_LOWBATT:
+
+------pin----------------------
+INOK: 
+FET
 
 ------AC operating characteristics-----
 tAICL: AICL delay
