@@ -244,17 +244,17 @@ if __name__ == '__main__':
     de_folder = sys.argv[2]
     en_folder = sys.argv[3]
 
-    if os.path.exists(de_folder) == False:
-        print("Error: de_folder: " + de_folder + " not exist")
+    if os.path.exists(en_folder) == False:
+        print("Error: en_folder: " + en_folder + " not exist")
         exit()
 
     if en_folder == de_folder:
         print("Error: en/de folder: " + en_folder + " should not same")
         exit()
 
-    # 递归创建en目录， 如果不存在
-    if os.path.exists(en_folder) == False:
-        os.makedirs(en_folder)
+    # 递归创建de目录， 如果不存在
+    if os.path.exists(de_folder) == False:
+        os.makedirs(de_folder)
 
     if action == "en":
         do_encrypt(de_folder, en_folder)
