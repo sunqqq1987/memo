@@ -157,13 +157,14 @@ def do_encrypt(FOLDER, out_folder):
             test_string = filepath
             len1 = len(test_string)
             beSearch1 = '.'
+            filepath_en=""
             try:
                 n1 = test_string.rindex(beSearch1)
+                postfix = filepath[n1 + 1:len1]
+                filepath_en = filepath[0:n1] + "_" + postfix + '.en'
             except:
-                n1 = len1-1
-            postfix = filepath[n1 + 1:len1]
-
-            filepath_en = filepath[0:n1] + "_" + postfix + '.en'
+                n1 = len1
+                filepath_en = filepath[0:n1] + "_" + '.en'
 
             # 使用输出路径
             p, f = os.path.split(filepath_en);
@@ -229,7 +230,11 @@ def do_decrypt(FOLDER, out_folder):
             postfix = filepath[n1 + 1:n2]
 
             # len_postfix = len(".en")
-            filepath_de = filepath[0: n1] + '.' + postfix
+            if postfix == "":
+                filepath_de = filepath[0: n1]
+            else:
+                filepath_de = filepath[0: n1] + '.' + postfix
+            
 
             # 使用输出路径
             p, f = os.path.split(filepath_de);
