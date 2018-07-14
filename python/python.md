@@ -151,6 +151,39 @@
     print str[-3:] 		#截取倒数第三位到结尾
     print str[:-5:-3] 	#逆序截取，具体啥意思没搞明白？
 
+
+# 数字与byte,char互换 #
+
+    >>> (204).to_bytes(length=1, byteorder='big')
+    b'\xcc'
+
+    >>> bytes([204])
+    b'\xcc'
+
+    >>> '204'.encode()
+    b'204'
+
+    >>> chr(204)
+    'Ì'
+
+    >>> ord('I')
+    204
+
+    >>> chr(204).encode('utf-8')  
+    b'\xc3\x8c'
+
+    >>> chr(204).encode() //python3中. 因为默认就是utf-8编码
+    b'\xc3\x8c'
+
+    >> str(204).encode('utf-8')  //python3中. 因为默认就是utf-8编码
+    b'\xc3\x8c'
+
+
+    python3.x中编码规则：
+    byte->str->byte
+    byte->str为解码；str->byte为编码
+
+
 # 字符串格式化 #
 
 http://www.cnblogs.com/xxby/p/5571620.html

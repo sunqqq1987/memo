@@ -63,21 +63,23 @@ def decode_string(text):
     return text
 
 
-def encrypt(data, password):
-    bs = AES.block_size
-    pad = lambda s: s.decode() + (bs - len(s) % bs) * chr(bs - len(s) % bs)
+def encrypt_CBC(data, password):
+    bs = AES.block_size # 16
+
+    #pad = lambda s: s.decode("utf8","ignore") + (bs - len(s) % bs) * chr(bs - len(s) % bs)
+    pad = lambda s: s + (bs - len(s) % bs) * chr(bs - len(s) % bs)
     iv = Random.new().read(bs)
     cipher = AES.new(password, AES.MODE_CBC, iv)
     data = cipher.encrypt(pad(data))
     data = iv + data
     return data
 
-
-def decrypt(data, password):
+def decrypt_CBC(data, password):
     bs = AES.block_size
+
     if len(data) <= bs:
         return data
-    # unpad = lambda s: s[0:-ord(s[-1])]
+    #unpad = lambda s: s[0:-ord(s[-1])]
     unpad = lambda s: s[0:-s[-1]]
     iv = data[:bs]
     cipher = AES.new(password, AES.MODE_CBC, iv)
@@ -85,8 +87,31 @@ def decrypt(data, password):
     return data
 
 
+def pad_to_16(text):
+    #在尾部添加pad_num个pad_num
+    pad_num = 16 - len(text) % 16
+    i = 0
+    while i < pad_num:
+        #text += str(pad_num).encode()
+        text += bytes([pad_num])
+        i = i+1
+    return text
+
+def encrypt(data, password):
+    aes = AES.new(password, AES.MODE_ECB)
+    encrypt_aes = aes.encrypt(pad_to_16(data))
+    encrypted_text = base64.encodebytes(encrypt_aes)
+    return encrypted_text
+
+def decrypt(data, password):
+    unpad = lambda s: s[0:-s[-1]]
+    aes = AES.new(password, AES.MODE_ECB)
+    base64_decrypted = base64.decodebytes(data)
+    decrypted_text = aes.decrypt(base64_decrypted)
+    decrypted_text = unpad(decrypted_text)
+    return decrypted_text
+
 def check_is_skip(text):
-    # for project show
     patternStr = ""
     i = 0
     for kw in SKIP_PATH_KEYWORDS:
@@ -132,7 +157,10 @@ def do_encrypt(FOLDER, out_folder):
             test_string = filepath
             len1 = len(test_string)
             beSearch1 = '.'
-            n1 = test_string.rindex(beSearch1)
+            try:
+                n1 = test_string.rindex(beSearch1)
+            except:
+                n1 = len1-1
             postfix = filepath[n1 + 1:len1]
 
             filepath_en = filepath[0:n1] + "_" + postfix + '.en'
@@ -149,20 +177,17 @@ def do_encrypt(FOLDER, out_folder):
                 os.remove(filepath_en)
 
             fp_en = open(filepath_en, 'wb')
-            # en_msg = ""
 
             # filesize = os.path.getsize(filepath)
 
             fp_org = open(filepath_org, 'rb')
             msg = fp_org.read()
-            en_msg = encrypt(msg, key)
-            en_msg = base64.b64encode(en_msg)
+            en_msg = encrypt(msg, key)  #--------------
+            # en_msg = base64.b64encode(en_msg)
             fp_org.close()
 
             fp_en.write(en_msg)
             fp_en.close()
-
-            # print(encrpt done.'
 
             time.sleep(2)
         i = i + 1
@@ -223,8 +248,8 @@ def do_decrypt(FOLDER, out_folder):
 
             fp_en = open(filepath_en, 'rb')
             msg = fp_en.read()
-            msg = base64.b64decode(msg)
-            de_msg = decrypt(msg, key)
+            # msg = base64.b64decode(msg)
+            de_msg = decrypt(msg, key)  #--------------
             fp_en.close()
 
             fp_de.write(de_msg)
