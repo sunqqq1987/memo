@@ -162,7 +162,12 @@
         查找文件
         ctr+p 后输入部分文件名
 
-        
+    13)排除workspace下的某个folder中的特定目录 folder1
+
+    在settings.json中加入：
+    "files.exclude": {
+        "**/folder1": true
+      },
 
    
     
