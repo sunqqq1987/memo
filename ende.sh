@@ -12,6 +12,7 @@ if [[ $cho = 0 ]]; then
 python3 do_crypto.py en $de_folder $en_folder
 echo "---en done."
 elif [[ $cho = 1 ]]; then
+rm -rf $de_folder
 python3 do_crypto.py de $de_folder $en_folder
 echo "---de done."
 else
