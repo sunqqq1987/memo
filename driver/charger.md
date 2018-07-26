@@ -99,7 +99,7 @@ approximately 120 msec after valid input power is applied.
 
 //Trickle charge current(30ma~25ma) versus battery voltage(1v~2v)
 
-datasheet: 充电电流典型值22ma(V_BATT=1.8V时,电压２.05v(typ.)), 现在设置的充电电流多少？
+datasheet: 充电电流典型值22ma(V_BATT=1.8V时,电压２.05v(typ.)), 现在设置的充电电流多少？90ma
 
 If the battery voltage is below 2.1 V (trickle-charge to pre-charge threshold), the device will
 apply a trickle-charge current of 22 mA (typical). This allows the SMB23x family to reset the
@@ -139,7 +139,7 @@ V = 2.1 V + X * 100 mV, X = 0, ... ,15
 
 3. 进入fast-charge的阈值是3.0v，然后进行恒流充电，直到到达float volatage（4.4v, 可选范围有(3.48,...,4.72))
 
-datasheet: 对应的充电电流有 100,250,300ma（选择）,370,600,600,700,1000ma
+datasheet: 对应的充电电流有 100,250,300ma（选择）,370,600,700,1000ma
 
 fast charge timer是 180 min(选择),270,360 (见datasheet中 Complete-charge timeout)
 
@@ -180,7 +180,8 @@ Input Current Limit Mode(ICL 输入电流限制模式)：设定的范围是100ma
     AC充电: 指(AICL Algorithm　or Default Setting): 充电电流９０ma～１０００ma
     充电器输入是交流电,输出是直流电
 
-    Max AC input current limit(I_INLIMIT): 100,300,500,...1500MA, no limit
+    //see Table 5-1 Configuration register
+    Max AC input current limit(I_INLIMIT): 100,300,500, 650, 900, 1000, 1500MA, no limit
     Max USB5 input current limit: 500MA,300MA
 
 

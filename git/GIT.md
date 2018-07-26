@@ -40,15 +40,21 @@
     如果想删除分支,则：
     git branch -d test1
 
-
     7) 撤销本地分支的上一次commit
     git reset --hard HEAD^  #回退工作区，暂存区以及本地版本到当前版本库里的上一个版本（已经git commit）。
 
     8）更新远程分支的修改到当前分支
-    方法一：
+
+    方法1： <推荐>
+    git fetch origin/xx //将远程库的修改更新到本地仓库
+    git checkout my_branch  //切换到my_branch分支
+    git merge origin/xx //将本地库的修改更新到当前的my_branch分支
+
+    方法2：
     git pull 　　//这可能会发生merge
-    方法２:
-    git rebase   [other branch] //本地修改会在最新的分支基础上，可能会有冲突
+
+    方法3:
+    git rebase   [other branch] //本地commit的修改会在最新的分支基础上，但可能会有冲突
 
 
     9) git commit时修改作者信息

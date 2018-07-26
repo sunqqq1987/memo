@@ -54,6 +54,9 @@
 
 			grep -nR "BRILLO_USE_" . --exclude-dir=out //查找时排除out目录
 
+            如果关键子带点，则要加\进行转义：
+            grep "\.c"
+
 	- locate
 
     		locate libc.a  #查找libc.a的位置

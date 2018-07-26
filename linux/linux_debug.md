@@ -13,6 +13,9 @@
 		adb shell dmesg >d:/temp/1.txt  //只有kernel log，但只能输出当前的kernel log, 然后退出
 		adb shell logcat -b kernel  //可以不断输出kernel log
 
+        android 8.0后：
+        #define LAST_KMSG_PSTORE_PATH   "/sys/fs/pstore/console-ramoops"
+
 - 用printk 输出log
 
     - 打印指针
