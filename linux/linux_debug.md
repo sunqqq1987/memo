@@ -16,6 +16,16 @@
         android 8.0后：
         #define LAST_KMSG_PSTORE_PATH   "/sys/fs/pstore/console-ramoops"
 
+       更多参考：https://blog.csdn.net/skykingf/article/details/50600439
+        
+- 开机后台抓取kernel log
+
+        https://blog.csdn.net/kris_fei/article/details/77186635?locationNum=3&fps=1
+
+- bugreport/dumpstate的实现
+
+        https://blog.csdn.net/u010164190/article/details/72875984
+        
 - 用printk 输出log
 
     - 打印指针
