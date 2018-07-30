@@ -41,7 +41,10 @@
     git branch -d test1
 
     7) 撤销本地分支的上一次commit
-    git reset --hard HEAD^  #回退工作区，暂存区以及本地版本到当前版本库里的上一个版本（已经git commit）。
+    git reset --hard HEAD^  //彻底回退工作区/暂存区/本地版本到当前版本库里的上一个版本（已经git commit到本地库）
+    
+    git reset HEAD  //当还没有commit时，回退index
+    git reset HEAD^ //当有一次commit时，回退上次的commit和index
 
     8）更新远程分支的修改到当前分支
 
@@ -54,7 +57,13 @@
     git pull 　　//这可能会发生merge
 
     方法3:
+    先提交本地修改：git add, git commit
+    再：
     git rebase   [other branch] //本地commit的修改会在最新的分支基础上，但可能会有冲突
+    有冲突时:
+    1)解决冲突
+    2)git add 
+    3)git rebase --continue, 无需执行 git commit. 
 
 
     9) git commit时修改作者信息
@@ -174,14 +183,19 @@
 
     git log --grep="search condition"  //查找commit message中满足指定条件的提交
 
-**git reset** （前提是没有推送到远程库）回退文件到当前版本库的某个版本或撤销暂存区的修改。
+**git reset** （前提是没有push到远程库）回退本地版本库的修改。
     
-        git reset --hard HEAD^  #回退工作区，暂存区以及本地版本到当前版本库里的上一个版本（已经git commit）。
-        HEAD表示当前版本，也就是最新的提交commit id:3628164...882e1e0，
+    git reset --hard HEAD^  //彻底回退工作区/暂存区/本地版本到当前版本库里的上一个版本（已经git commit到本地库）
+    HEAD表示当前版本，也就是最新的提交commit id:3628164...882e1e0，
     上一个版本就是HEAD^，上上一个版本就是HEAD^^，当然往上100个版本写100个^比较容易数不过来，所以写成HEAD~100。
 
-        git reset --hard 3628164  #回退到指定的commit id 版本
-        git reset HEAD file     #撤销暂存区的修改（变为unstage状态），重新放回工作区.
+    git reset --hard 3628164  //彻底回退工作区/暂存区/本地版本到指定的commit id
+
+    git reset --mixed：此为默认方式(等价于git reset)，回退commit和index,但不回退工作区
+    git reset HEAD //当还没有commit时，回退index
+    git reset HEAD^ //当有一次commit时，回退上次的commit和index
+
+    git reset --soft：回退到某个版本，只回退了commit，不回退工作区和index
 
     git reset               //撤消所有 git add（即撤销暂存区里的改动）
     git reset hello.c       //撤消所有 git add hello.c
