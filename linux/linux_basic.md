@@ -43,7 +43,7 @@
 			另外， -mmin参数-cmin / - amin也是类似的。
 			
 
-	- grep内容
+	- grep 内容查找
 
 		    grep -nR "build" ./* 2>/dev/null >../build.txt 
 			//在当前目录下查找包括build的文本行(显示行号)，并将结果输出到build.txt
@@ -53,6 +53,9 @@
 		    grep 'test' aa bb cc //查找在aa，bb，cc文件中包含test的行
 
 			grep -nR "BRILLO_USE_" . --exclude-dir=out //查找时排除out目录
+
+            grep -nR "charger" . --include=*.rc //在指定后缀的文件中查找charger
+
 
             如果关键子带点，则要加\进行转义：
             grep "\.c"
