@@ -314,7 +314,7 @@
 
 # shell #
 
--echo
+- echo
 
         参考： https://jingyan.baidu.com/article/da1091fb1620a2027949d642.html
 
@@ -338,3 +338,11 @@
         如：
         echo `pwd`
         =>/root
+
+- 获取文件sha1
+
+        sha1() {
+            sha1sum $1 | awk '{print $1}'
+        }
+        
+        sha1 "/home/cheng/vista.img"

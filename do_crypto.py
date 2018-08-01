@@ -14,7 +14,23 @@ from Crypto import Random
 
 import re
 
-SKIP_PATH_KEYWORDS = ['\.git']
+from hashlib import md5, sha1
+import shutil
+
+BACKUP_FOLDER= 'BACKUP_FOLDER'
+SKIP_PATH_KEYWORDS = ['\.git', BACKUP_FOLDER]
+
+def getMd5(filename): #计算md5
+    mdfive = md5()
+    with open(filename, 'rb') as f:
+        mdfive.update(f.read())
+    return mdfive.hexdigest()
+
+def getSha1(filename): #计算sha1
+    sha1Obj = sha1()
+    with open(filename, 'rb') as f:
+        sha1Obj.update(f.read())
+    return sha1Obj.hexdigest()
 
 def get_key():
 
@@ -150,51 +166,61 @@ def do_encrypt(FOLDER, out_folder):
         is_skip = check_is_skip(filepath)
 
         if is_skip == 0:
-            print('encrypt: ' + filepath)
 
-            filepath_org = filepath
+            #check if change or not
+            bak_fld = FOLDER+"/"+BACKUP_FOLDER
+            filepath_bk = filepath.replace(FOLDER, bak_fld)
+            if getSha1(filepath) == getSha1(filepath_bk):
+                print('---skip unchanged: ' + filepath)
+                #print(' filepath_bk: ' + filepath_bk)
+            else:
+                print('encrypt: ' + filepath)
 
-            test_string = filepath
-            len1 = len(test_string)
-            beSearch1 = '.'
-            filepath_en=""
-            try:
-                n1 = test_string.rindex(beSearch1)
-                postfix = filepath[n1 + 1:len1]
-                filepath_en = filepath[0:n1] + "_" + postfix + '.en'
-            except:
-                n1 = len1
-                filepath_en = filepath[0:n1] + "_" + '.en'
+                filepath_org = filepath
 
-            # 使用输出路径
-            p, f = os.path.split(filepath_en);
-            p = p.replace(FOLDER, out_folder)
-            if os.path.exists(p) == False:
-                os.makedirs(p)  # 先创建输出路径
+                test_string = filepath
+                len1 = len(test_string)
+                beSearch1 = '.'
+                filepath_en=""
+                try:
+                    n1 = test_string.rindex(beSearch1)
+                    postfix = filepath[n1 + 1:len1]
+                    filepath_en = filepath[0:n1] + "_" + postfix + '.en'
+                except:
+                    n1 = len1
+                    filepath_en = filepath[0:n1] + "_" + '.en'
 
-            filepath_en = filepath_en.replace(FOLDER, out_folder)
-            print("-----to: " + filepath_en)
-            if os.path.exists(filepath_en):
-                os.remove(filepath_en)
+                # 使用en路径
+                p, f = os.path.split(filepath_en);
+                p = p.replace(FOLDER, out_folder)
+                if os.path.exists(p) == False:
+                    os.makedirs(p)  # 先创建输出路径
 
-            fp_en = open(filepath_en, 'wb')
+                filepath_en = filepath_en.replace(FOLDER, out_folder)
+                print("-----to: " + filepath_en)
+                if os.path.exists(filepath_en):
+                    os.remove(filepath_en)
 
-            # filesize = os.path.getsize(filepath)
+                fp_en = open(filepath_en, 'wb')
 
-            fp_org = open(filepath_org, 'rb')
-            msg = fp_org.read()
-            en_msg = encrypt(msg, key)  #--------------
-            # en_msg = base64.b64encode(en_msg)
-            fp_org.close()
+                # filesize = os.path.getsize(filepath)
 
-            fp_en.write(en_msg)
-            fp_en.close()
+                fp_org = open(filepath_org, 'rb')
+                msg = fp_org.read()
+                en_msg = encrypt(msg, key)  #--------------
+                # en_msg = base64.b64encode(en_msg)
+                fp_org.close()
 
-            time.sleep(2)
+                fp_en.write(en_msg)
+                fp_en.close()
+
+                time.sleep(0.5)
+
         i = i + 1
 
 
 def do_decrypt(FOLDER, out_folder):
+
     # must be 16 bytes long ，初始化密钥
     key=get_key()
 
@@ -236,11 +262,11 @@ def do_decrypt(FOLDER, out_folder):
                 filepath_de = filepath[0: n1] + '.' + postfix
             
 
-            # 使用输出路径
+            # 使用de路径
             p, f = os.path.split(filepath_de);
-            p = p.replace(FOLDER, out_folder)
-            if os.path.exists(p) == False:
-                os.makedirs(p)  # 先创建输出路径
+            p1 = p.replace(FOLDER, out_folder)
+            if os.path.exists(p1) == False:
+                os.makedirs(p1)  # 先创建输出路径
 
             filepath_de = filepath_de.replace(FOLDER, out_folder)
             print("-----to: " + filepath_de)
@@ -260,9 +286,17 @@ def do_decrypt(FOLDER, out_folder):
             fp_de.write(de_msg)
             fp_de.close()
 
-            time.sleep(2)
+            time.sleep(0.5)
+
         i = i + 1
 
+    # 拷贝一份到bakup folder
+    bak_fld = out_folder+"/"+BACKUP_FOLDER
+    if os.path.exists(bak_fld) == True:
+        shutil.rmtree(bak_fld)  # 存在先删除
+    shutil.copytree(out_folder, bak_fld)
+    print ("\n copy folder:" + out_folder + " To backup folder:" +  bak_fld + ", done")
+    
 
 if __name__ == '__main__':
 
