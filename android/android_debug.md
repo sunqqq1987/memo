@@ -1,3 +1,29 @@
+# log #
+
+1) bugreport
+
+    adb bugreport > br1.txt
+    ==> 在当前目录下生成br1.txt以及对应的bugreport***.zip
+    从br1.txt里可以看到bugreport文件在device中的路径
+
+    adb bugreport br1
+    ==> 在当前目录下生成br1.zip
+
+
+    将 wear os产生的bugreport导出：
+    adb pull /data/user_de/0/com.google.android.apps.wearable.bugreportsender/cache ~/xxl/tmp/
+    bugreport会打包以下目录：
+    /data/misc/logd
+    往上面的目录push文件：
+    adb root
+    adb push /home/mobvoi/xxl/issues/crash_after_do_bugreport/test/* /data/misc/logd
+    
+
+2) dumpstate
+
+    // Start the dumpstate service.
+    property_set("ctl.start", "dumpstate");
+
 # ANR #
 
 	ANR: Application not responding

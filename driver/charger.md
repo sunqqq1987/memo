@@ -295,15 +295,6 @@ A device option also exists for notifying the system of a battery thermal condit
 
 ==========charger UI启动流程================================
 
-Init.cpp (z:\home\xxl\aosp\system\core\init):
-
-    // Don't mount filesystems or start core system services in charger mode.
-    std::string bootmode = GetProperty("ro.bootmode", "");
-    if (bootmode == "charger") {
-        am.QueueEventTrigger("charger"); //==启动charger service（方式1）
-    } else {
-        am.QueueEventTrigger("late-init");
-
 Init.common.rc (z:\home\xxl\aosp\device\google\marlin):
 
     on charger
@@ -324,54 +315,16 @@ Init.common.rc (z:\home\xxl\aosp\device\google\marlin):
 Init.rc (z:\home\xxl\aosp\system\core\rootdir):
 
     on charger
-        class_start charger
+        class_start charger //===>启动charger service
 
-==启动service的方式2：
 
-service data_on /system/bin/ext_data_on.sh  -u
-    user root
-    disabled //默认是disable
-    oneshot
+Init.cpp (z:\home\xxl\aosp\system\core\init):
 
-但是我们可以通过 property_set("ctl.start", service_xx) 来启动，
-比如：
-proprietories-source/phoneserver/ps_service.c:643:                property_set("ctl.start", "data_on");  //启动服务配置网卡参数
-
-命令：setprop ctl.start qtnrfon
-
-service 启动分析
-
-参考：https://blog.csdn.net/chaoy1116/article/details/44751443
-
-/system/core/init/...:
-
-static int do_class_start(const std::vector<std::string>& args) {
-        /* Starting a class does not start services
-         * which are explicitly disabled.  They must
-         * be started individually.
-         */
-    ServiceManager::GetInstance().
-        ForEachServiceInClass(args[1], [] (Service* s) { s->StartIfNotDisabled(); });
-    return 0;
-}
-
--> bool Service::StartIfNotDisabled() {
-    if (!(flags_ & SVC_DISABLED)) { //没有设置disabled的service
-        return Start();
+    // Don't mount filesystems or start core system services in charger mode.
+    std::string bootmode = GetProperty("ro.bootmode", "");
+    if (bootmode == "charger") {
+        am.QueueEventTrigger("charger");  //触发on charger
     } else {
-        flags_ |= SVC_DISABLED_START;
+        am.QueueEventTrigger("late-init");  
     }
-    return true;
-}
 
--> bool Service::Start() 
-{
-    ...
-    LOG(INFO) << "starting service '" << name_ << "'...";
-     pid_t pid = -1;
-    if (namespace_flags_) {
-        pid = clone(nullptr, nullptr, namespace_flags_ | SIGCHLD, nullptr);
-    } else {
-        pid = fork();
-    }
-}

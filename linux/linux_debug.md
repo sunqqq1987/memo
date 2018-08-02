@@ -14,7 +14,20 @@
 		adb shell logcat -b kernel  //可以不断输出kernel log
 
         android 8.0后：
+        adb shell cat /sys/fs/pstore/console-ramoops > last_kmsg.txt
+
+        adb root
+        adb shell dmesg > kmsg.txt
+
+        其他：
+        dump_last_kmsg()
+        #define LAST_KMSG_PATH          "/proc/last_kmsg"
         #define LAST_KMSG_PSTORE_PATH   "/sys/fs/pstore/console-ramoops"
+        
+- 检查last kmsg是否有特定信息
+
+        Fs_mgr_verity.cpp (system\core\fs_mgr)：
+        was_verity_restart()
 
        更多参考：https://blog.csdn.net/skykingf/article/details/50600439
         

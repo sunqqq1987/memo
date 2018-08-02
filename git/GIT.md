@@ -28,6 +28,8 @@
     ada5327 - bjzhu@xx.com, Fri Mar 30 04:24:14 2018 +0000 : Merge "drivers: usb: enable floated charger" into andr
     a68ce5d - bjzhu@xx.com, Fri Mar 30 12:00:02 2018 +0800 : drivers: usb: enable floated charger
 
+    git log --pretty=format:"%h - %ae, %cd : %s" --grep=mobvoi.com
+
     //显示当前目录下的改动，包括改动的文件
     git log --pretty=format:"%h - %ae, %cd : %s" --grep=charger --author=xx.com --stat .
 
@@ -73,6 +75,16 @@
 
     10) 获得某个目录下的commit
     git log --pretty --stat . >~/xxl/study/charger/FG_commits.txt
+
+    11) 打补丁
+    https://blog.csdn.net/liuhaomatou/article/details/54410361
+
+    git am 可以一次合并一个文件，或者一个目录下所有的patch
+    方法：
+    把生成的patch文件copy到一个文件夹中，然后:git am patch/*patch
+    之后git log就看到有个commit了
+
+
  
 ## git diff ##
 
