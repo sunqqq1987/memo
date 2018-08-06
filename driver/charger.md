@@ -109,37 +109,39 @@ protection circuit in the battery pack and bring the battery voltage to a higher
 If the trickle-charge to pre-charge voltage threshold is not exceeded before the pre-charge timer expires, 
 the charge cycle is terminated, both FETs are turned off and power recycling is necessary for re-initiating charging.
 
-在datasheet中有： Pre-charge timeout (includes trickle charging), 45 min
+在datasheet中有： Pre-charge timeout (includes trickle charging): 45 min
 
 
-2. 进入pre-charge的阈值是2.2v(选择），(2.05v(typ), data sheet)
+2. 进入pre-charge的阈值是2.2v(sbl选择），(2.05v(typ), data sheet)
 
-datasheet: pre-charge电压的４个级别：2.5,2.6,2.8,3.0v，对应的pre-charge电流：20ma（选择？）,30ma,50ma,75ma
+datasheet: 对应的pre-charge电流：20ma,30ma（选择）,50ma,75ma
 
 The preconditioning current is programmable, with the default value at C/10.
 If the battery voltage does not reach the preconditioning voltage level (programmable) within a
 specified amount of time (pre-charge timeout), the safety timer expires and the charge cycle is　terminated
-=>pre-charge timer内确保会升到fast-charge的阈值
+=>pre-charge timer（45 min)内确保会升到fast-charge的阈值
 
 -------8x10-----[
-CHGR_VBAT_TRKL //address 0x1050, 可设的pre charge电压范围：2.05～2.8v
+CHGR_VBAT_TRKL //address 0x1050, 可设的to pre charge电压范围：2.05～2.8v
 Battery voltage threshold for trickle charging; below which the battery is charged with the linear trickle charger with IBAT_TRKL_A
 V = 2.05 V + X * 50 mV, X = 0, 1, , 15
 2.05： PM_CHG_VBAT_TRKL_MIN_THRESHOLD
 当前sbl设置的是： PM_CHG_FLCB_DEAD_BATTERY_THRESHOLD
+==>8909是2.2v
 
-
-CHGR_VBAT_WEAK //address 0x1052, 可设的fast-charge电压范围：2.1～3.6v
+CHGR_VBAT_WEAK //address 0x1052, 可设的to fast-charge电压范围：2.1～3.6v
 Weak battery voltage threshold; above which system can boot, and fast charging can start
 V = 2.1 V + X * 100 mV, X = 0, ... ,15
 2.1： PM_CHG_VBAT_WEAK_MIN_THRESHOLD
 3.6： PM_CHG_VBAT_WEAK_MAX_THRESHOLD
-当前sbl设置的是：PM_CHG_FLCB_WEAK_BATTERY_THRESHOLD
+当前sbl设置的是： PM_CHG_FLCB_WEAK_BATTERY_THRESHOLD
+==>8909是2.2v
 ---------------]
 
-3. 进入fast-charge的阈值是3.0v，然后进行恒流充电，直到到达float volatage（4.4v, 可选范围有(3.48,...,4.72))
+3. 进入fast-charge的阈值是3.0v（选择），然后进行恒流充电，直到到达float volatage（4.4v, 可选范围有(3.48,...,4.72))
 
-datasheet: 对应的充电电流有 100,250,300ma（选择）,370,600,700,1000ma
+datasheet: Pre-charge to fast-charge voltage threshold(４个级别：2.5,2.6,2.8,3.0v(选择)), 
+对应的充电电流有 100,250,300ma（选择）,370,600,700,1000ma
 
 fast charge timer是 180 min(选择),270,360 (见datasheet中 Complete-charge timeout)
 
@@ -147,16 +149,19 @@ When the battery voltage reaches the pre-charge to fast-charge voltage level, th
 enters the constant current (fast charge) mode. The fast charge current level is programmable via　the corresponding register.
 
 
-4. 到达float voltage后，进入恒压充电（保持电池的电压恒定），之后充电电流会逐渐减小。
+4. 到达float voltage 4.4v(选择）后，进入恒压充电（保持电池的电压恒定），此时充电电流会逐渐减小（current taper mode)。
 恒压充电的模式的终止发生在以下２个条件之一：
-１）fast-charge的timer到期（此时异常，因为期望是在该timer内电流降到截止电流）
-２）fast-charge的timer没有到期，但充电电流I_CHG降到截止电路的阈值I_TERM（termination current threshold），此时进入停止充电,standby mode
+１）fast-charge的timer到期（此时异常，因为期望是在该timer内电流降到截止电流 I_TERM（20ma(选择),termination current threshold））
+２）fast-charge的timer没有到期，但充电电流I_CHG降到截止电路的阈值， 此时充电电流变为0，停止充电,进入standby mode
+
+The charge cycle is considered complete when the charge current reaches the programmed
+termination current threshold, assuming the SMB23x family has entered current taper mode.
 
 The constant-voltage charging mode will continue until the charge current
 drops below the termination current threshold, or until the fast charge timer has expired.
 
 5. re-charge
-re-charge电压阈值是？ datasheet: 90mv~200mv, 150mv(typ)
+re-charge电压阈值是4.4v-150mv=4.25v, datasheet: 90mv~200mv, 150mv(选择)
 
 After the charge cycle has terminated, the SMB23x family continues to monitor the battery　voltage. 
 If the battery voltage falls below the recharge threshold (programmable), 
@@ -193,6 +198,8 @@ UVLO threshold (<3.5v)
 ovlo threshold (>6.2v)
 
 V_LOWBATT: 15 steps, battery voltage falling, 2.5~3.7v
+=> smb231: 2.5v~3.58v, 但目前是disabled, 01h: Low-battery/SYSOK voltage detection threshold
+
 
 parameters can also be programmed statically via a user-friendly GUI interface:
 ■ Battery (float) voltage
@@ -328,3 +335,8 @@ Init.cpp (z:\home\xxl\aosp\system\core\init):
         am.QueueEventTrigger("late-init");  
     }
 
+
+
+
+================Battery History报告===========
+https://bathist.ef.lc/
