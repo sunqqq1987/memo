@@ -216,7 +216,7 @@ def do_encrypt(FOLDER, out_folder):
                 fp_en.write(en_msg)
                 fp_en.close()
 
-                time.sleep(0.5)
+                time.sleep(0.2)
 
         i = i + 1
 
@@ -288,7 +288,7 @@ def do_decrypt(FOLDER, out_folder):
             fp_de.write(de_msg)
             fp_de.close()
 
-            time.sleep(0.5)
+            time.sleep(0.2)
 
         i = i + 1
 
