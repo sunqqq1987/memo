@@ -19,6 +19,10 @@
     adb push /home/mobvoi/xxl/issues/crash_after_do_bugreport/test/* /data/misc/logd
     
 
+    系统属性
+    bugreport中：
+    SYSTEM PROPERTIES (getprop)
+
 2) dumpstate
 
     // Start the dumpstate service.

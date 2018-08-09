@@ -152,6 +152,83 @@
 
 - sysrq: 打印系统进程的信息，甚至可以trigger panic
 
+        参考： https://blog.csdn.net/skdkjzz/article/details/50426397
+
+        //开启SysRq功能
+        echo 1>/proc/sys/kernel/sysrq 
+
+        //手动触发crash
+        echo c>/proc/sysrq-trigger 
+
+        //显示disk sleep的进程
+        echo d>/proc/sysrq-trigger
+
+         //显示线程信息
+        echo t>/proc/sysrq-trigger
+
+        //显示linux memory状态
+        echo m>/proc/sysrq-trigger
+
+
+
+        static struct sysrq_key_op *sysrq_key_table[36] = {
+        &sysrq_loglevel_op,		/* 0 */
+        &sysrq_loglevel_op,		/* 1 */
+        &sysrq_loglevel_op,		/* 2 */
+        &sysrq_loglevel_op,		/* 3 */
+        &sysrq_loglevel_op,		/* 4 */
+        &sysrq_loglevel_op,		/* 5 */
+        &sysrq_loglevel_op,		/* 6 */
+        &sysrq_loglevel_op,		/* 7 */
+        &sysrq_loglevel_op,		/* 8 */
+        &sysrq_loglevel_op,		/* 9 */
+
+        /*
+        * a: Don't use for system provided sysrqs, it is handled specially on
+        * sparc and will never arrive.
+        */
+        NULL,				/* a */
+        &sysrq_reboot_op,		/* b */
+        &sysrq_crash_op,		/* c & ibm_emac driver debug */
+        &sysrq_showlocks_op,		/* d */
+        &sysrq_term_op,			/* e */
+        &sysrq_moom_op,			/* f */
+        /* g: May be registered for the kernel debugger */
+        NULL,				/* g */
+        NULL,				/* h - reserved for help */
+        &sysrq_kill_op,			/* i */
+        #ifdef CONFIG_BLOCK
+        &sysrq_thaw_op,			/* j */
+        #else
+        NULL,				/* j */
+        #endif
+        &sysrq_SAK_op,			/* k */
+        #ifdef CONFIG_SMP
+        &sysrq_showallcpus_op,		/* l */
+        #else
+        NULL,				/* l */
+        #endif
+        &sysrq_showmem_op,		/* m */
+        &sysrq_unrt_op,			/* n */
+        /* o: This will often be registered as 'Off' at init time */
+        NULL,				/* o */
+        &sysrq_showregs_op,		/* p */
+        &sysrq_show_timers_op,		/* q */
+        &sysrq_unraw_op,		/* r */
+        &sysrq_sync_op,			/* s */
+        &sysrq_showstate_op,		/* t */
+        &sysrq_mountro_op,		/* u */
+        /* v: May be registered for frame buffer console restore */
+        NULL,				/* v */
+        &sysrq_showstate_blocked_op,	/* w */
+        /* x: May be registered on ppc/powerpc for xmon */
+        /* x: May be registered on sparc64 for global PMU dump */
+        NULL,				/* x */
+        /* y: May be registered on sparc64 for global register dump */
+        NULL,				/* y */
+        &sysrq_ftrace_dump_op,		/* z */
+        };
+
 - trace32在线调试
 
 - trace simulator分析ramdump

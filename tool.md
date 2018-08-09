@@ -107,6 +107,11 @@
 
         https://blog.csdn.net/zmlovelx/article/details/80426035
 
+# Geany
+
+   类似windows的notepad++
+   正则表达式查找： 
+   1）查找包括a或b的行： (a|b)
 
 # vscode #
 

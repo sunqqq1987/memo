@@ -76,13 +76,26 @@
     10) 获得某个目录下的commit
     git log --pretty --stat . >~/xxl/study/charger/FG_commits.txt
 
-    11) 打补丁
+    11) 打patch
     https://blog.csdn.net/liuhaomatou/article/details/54410361
 
     git am 可以一次合并一个文件，或者一个目录下所有的patch
     方法：
     把生成的patch文件copy到一个文件夹中，然后:git am patch/*patch
     之后git log就看到有个commit了
+
+    12）生成patch
+
+    把某次commit以后的（不包括该提交）都生成patch：
+    git format-patch e795fefabc
+
+    某次提交（包含）之前的几次提交，都生成patch：
+    git format-patch –n 07fe  //n指patch数，07fe对应提交的名称
+
+
+    12)查看全部分支下的已经commit但没有push的:
+    
+    git log --branches --not --remotes
 
 
  
@@ -560,6 +573,9 @@ git cherry-pick 可以将某一个分支中的一个或几个commit(s)来应用�
                       像这样：git stash apply stash@{2}. 如果不指定一个储藏，Git 认为指定的是最近的储藏.
     git stash pop //要移除的储藏的名字来移除
     git stash clear //清空Git栈
+
+    git stash show -p stash@{1}  //查看第二最近stash
+    git stash show -p   //查看最近stash
      
     https://git-scm.com/book/zh/v2/Git-%E5%B7%A5%E5%85%B7-%E5%82%A8%E8%97%8F%E4%B8%8E%E6%B8%85%E7%90%86#_git_stashing
 

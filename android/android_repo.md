@@ -67,7 +67,7 @@
 
 - 使用repo sync单独同步某个项目
 
-        1)打开.repo/manifiest.xml文件（这是隐藏文件夹，可用Ctrl+h显示）
+        1)打开 .repo/manifiest.xml文件（这是隐藏文件夹，可用Ctrl+h显示）
         2)找到所要下载的project，使用path或者name字段的值都可以，直接跟在repo sync后作为参数即可
 
         比如：
