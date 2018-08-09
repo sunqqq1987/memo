@@ -161,3 +161,8 @@
         // physical address (A)
         // No Cache (NC)
         
+
+- 操作符
+
+        ide_user.pdf中：Operators　部分
+        

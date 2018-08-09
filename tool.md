@@ -75,6 +75,10 @@
         2）重新安装sudo apt-get install open-vm-tools-desktop
         3）sudo reboot
 
+- ubuntu显示桌面
+
+        Ctrl + Win + D：快速显示桌面 / 恢复屏幕显示
+        
 - 看图片
 
         display pic.png
