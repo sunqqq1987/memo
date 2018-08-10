@@ -68,6 +68,9 @@
         # 格式化字符串
         &tmpstr=format.string("&callAddrName", 55., ' ')
 
+        # 格式化时间为十进制不带 .
+        &ns=format.decimalU(0,&ns)
+
         # 格式化
         参考：Display Formats
         
@@ -164,5 +167,6 @@
 
 - 操作符
 
-        ide_user.pdf中：Operators　部分
+        ide_user.pdf中： Operators 部分
         
+- 
