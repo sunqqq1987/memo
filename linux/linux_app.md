@@ -597,3 +597,23 @@
 		$ldd hello
 		libc.so.6=>/lib/libc.so.6(0x400la000)
 		/lib/ld-linux.so.2=>/lib/ld-linux.so.2 (0x40000000) 
+
+# sscanf #
+
+    格式化字符串，以得到特定的部分
+    
+    Linux C语言中sscanf 的详细用法
+    https://blog.csdn.net/yuesichiu/article/details/40538203
+
+    函数原型:  
+    Int  sscanf( string str, string fmt, mixed var1, mixed var2 ... );  
+    int scanf( const char *format [,argument]... ); 
+
+    sscanf与scanf类似，都是用于输入的，只是后者以屏幕(stdin)为输入源，前者以固定字符串为输入源。
+    其中的format可以是一个或多个 {%[*] [width] [{h | l | I64 | L}]type | ' ' | '/t' | '/n' | 非%符号}
+
+# strtol #
+
+    string转整数
+
+    strtol(freq_max[cpu], NULL, 10)
