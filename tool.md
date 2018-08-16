@@ -103,6 +103,84 @@
         3) wine启动非exe的方法
         wine start .wine/drive_c/xxl_start_arm_sim.bat
 
+        4) 卸载软件
+
+            wine会在/home下的用户名目录生成三个隐藏的文件夹 .wine、.local、.config 
+            
+            进入 .wine 文件夹可以看到 drive_c 文件夹，这是wine自动生成的虚拟 C盘，里面有类似windows系统盘的目录结构，在里面找到需要卸载的软件文件夹删除；
+            接着找到/home/用户名目录/.local/share/applications/wine/Programs，将软件对应的文件删除；
+            最后/home/用户名目录/.config/menus/applications-merged，将软件对应的文件删除；
+
+            对于office, 还要参数注册表，参考：https://jingyan.baidu.com/article/d5a880ebbbdf0113f047cc60.html
+
+        4) wine支持中文
+
+            https://jingyan.baidu.com/article/1974b28953c881f4b0f7744c.html
+
+            1)安装字体simsun.ttc，　百度关键词
+
+            2)下载好是zip的压缩包，将它解压出来。
+            这里我们需要的是后缀ttc的字体文件
+            将这个文件复制到~/.wine/drive_c/windows/Fonts
+
+            3)新建zh.reg
+            内容如下：
+
+            REGEDIT4
+
+            [HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\FontSubstitutes]
+
+            "Arial"="simsun"
+
+            "Arial CE,238"="simsun"
+
+            "Arial CYR,204"="simsun"
+
+            "Arial Greek,161"="simsun"
+
+            "Arial TUR,162"="simsun"
+
+            "Courier New"="simsun"
+
+            "Courier New CE,238"="simsun"
+
+            "Courier New CYR,204"="simsun"
+
+            "Courier New Greek,161"="simsun"
+
+            "Courier New TUR,162"="simsun"
+
+            "FixedSys"="simsun"
+
+            "Helv"="simsun"
+
+            "Helvetica"="simsun"
+
+            "MS Sans Serif"="simsun"
+
+            "MS Shell Dlg"="simsun"
+
+            "MS Shell Dlg 2"="simsun"
+
+            "System"="simsun"
+
+            "Tahoma"="simsun"
+
+            "Times"="simsun"
+
+            "Times New Roman CE,238"="simsun"
+
+            "Times New Roman CYR,204"="simsun"
+
+            "Times New Roman Greek,161"="simsun"
+
+            "Times New Roman TUR,162"="simsun"
+
+            "Tms Rmn"="simsun"
+
+            4)在zh.reg目录下，终端命令：
+            regedit zh.reg
+
 - beyondcompare4 破解
 
         1) linux上
