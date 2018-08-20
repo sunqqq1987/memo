@@ -87,11 +87,34 @@
 
         sudo apt-get -f install
 
-－　多窗口工具
+- firefox
+
+        ubuntu 16.04:
+        sudo apt-get remove firefox
+        sudo apt-get install firefox
+        sudo apt-get install firefox-locale-zh-hans  //更改语言为中文
+
+- 建立桌面快捷方式
+
+        在/usr/share/applications 目录下，新建以软件名称命名的文件software_name.desktop:
+
+        [Desktop Entry]
+        Name=xxl_start_t32_32
+        Comment=xxl_start_t32_32
+        Keywords=t32_32;trace32_32
+        Exec=xxx.sh
+        Terminal=false
+        Type=Application
+        Icon=
+
+        将相应图标右键复制到桌面即可
+
+
+- 多窗口工具
 
         sudo apt-get install doublecmd-qt
 
-－　wine
+- wine
 
         1) 安装wine
         参考： https://wiki.winehq.org/Ubuntu
