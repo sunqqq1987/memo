@@ -129,7 +129,8 @@
 
 - tar
 
-    	解压: Tar zxvf XXX.gz -C /home/test  //-C是指定解压后的目录
+    	解压: tar zxvf XXX.gz -C /home/test  //-C是指定解压后的目录
+        压缩文件夹：tar zcvf xxx.gz folder
 
 - chown: 改变拥有者和群组
 
