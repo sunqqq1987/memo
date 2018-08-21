@@ -167,7 +167,7 @@ def do_encrypt(FOLDER, out_folder):
 
         if is_skip == 0:
 
-            #check if change or not
+            #check if changed or not
             bak_fld = FOLDER+"/"+BACKUP_FOLDER
             filepath_bk = filepath.replace(FOLDER, bak_fld)
             if os.path.exists(filepath) == True and os.path.exists(filepath_bk) == True and \
@@ -175,7 +175,7 @@ def do_encrypt(FOLDER, out_folder):
                 #print('---skip unchanged: ' + filepath)
                 pass
             else:
-                # 注意：不能发现文件被删除的情况
+                # 注意：不能发现de或en的文件被删除的情况
                 print('encrypt: ' + filepath)
 
                 filepath_org = filepath
