@@ -18,7 +18,7 @@ from hashlib import md5, sha1
 import shutil
 
 BACKUP_FOLDER= 'BACKUP_FOLDER'
-SKIP_PATH_KEYWORDS = ['\.git', BACKUP_FOLDER]
+SKIP_PATH_KEYWORDS = ['\.git', BACKUP_FOLDER, 'igr_']
 
 def getMd5(filename): #计算md5
     mdfive = md5()
