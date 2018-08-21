@@ -28,6 +28,15 @@
     // Start the dumpstate service.
     property_set("ctl.start", "dumpstate");
 
+3) logcat
+
+    adb logcat -v time -s xxx yyy
+    ==>按tag过滤出xxx或yyy的log
+
+    adb logcat | grep -i xxx
+    => 只显示xxx相关的log
+    https://www.cnblogs.com/bydzhangxiaowei/p/8168598.html
+
 # ANR #
 
 	ANR: Application not responding

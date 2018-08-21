@@ -6,6 +6,14 @@
 
 		https://www.kernel.org/doc/html/latest/dev-tools/index.html
 	
+- wake_lock
+
+        adb shell
+        echo test > /sys/power/wake_lock
+
+        //remove
+        echo test > /sys/power/wake_unlock
+
 - 抓开机log
 
 		adb shell cat /proc/last_kmsg >d:/temp/1.txt   //偶尔出现只有xbl log的情况
