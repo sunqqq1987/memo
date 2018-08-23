@@ -87,12 +87,25 @@
 
         sudo apt-get -f install
 
+- 更新linux时候提示无法“由于没有公钥,无法验证
+
+        sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 10B3F6FDBE35DEDD 
+
+- playonlinux
+
+        https://www.playonlinux.com/en/download.html
+
 - firefox
 
         ubuntu 16.04:
         sudo apt-get remove firefox
         sudo apt-get install firefox
         sudo apt-get install firefox-locale-zh-hans  //更改语言为中文
+
+- ubuntu wps
+
+        安装缺失字体
+        https://bbs.deepin.org/forum.php?mod=viewthread&tid=40615&extra=
 
 - 建立桌面快捷方式
 
@@ -136,7 +149,7 @@
 
             对于office, 还要参数注册表，参考：https://jingyan.baidu.com/article/d5a880ebbbdf0113f047cc60.html
 
-        4) wine支持中文
+        ５) wine支持中文
 
             https://jingyan.baidu.com/article/1974b28953c881f4b0f7744c.html
 
@@ -154,51 +167,28 @@
             [HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\FontSubstitutes]
 
             "Arial"="simsun"
-
             "Arial CE,238"="simsun"
-
             "Arial CYR,204"="simsun"
-
             "Arial Greek,161"="simsun"
-
             "Arial TUR,162"="simsun"
-
             "Courier New"="simsun"
-
             "Courier New CE,238"="simsun"
-
             "Courier New CYR,204"="simsun"
-
             "Courier New Greek,161"="simsun"
-
             "Courier New TUR,162"="simsun"
-
             "FixedSys"="simsun"
-
             "Helv"="simsun"
-
             "Helvetica"="simsun"
-
             "MS Sans Serif"="simsun"
-
             "MS Shell Dlg"="simsun"
-
             "MS Shell Dlg 2"="simsun"
-
             "System"="simsun"
-
             "Tahoma"="simsun"
-
             "Times"="simsun"
-
             "Times New Roman CE,238"="simsun"
-
             "Times New Roman CYR,204"="simsun"
-
             "Times New Roman Greek,161"="simsun"
-
             "Times New Roman TUR,162"="simsun"
-
             "Tms Rmn"="simsun"
 
             4)在zh.reg目录下，终端命令：
