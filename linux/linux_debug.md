@@ -6,6 +6,12 @@
 
 		https://www.kernel.org/doc/html/latest/dev-tools/index.html
 	
+- 时间点
+
+         PM      : suspend entry 2018-08-19 23:47:32.269249326 UTC
+         => 这是utc时间，实际的中国时间应该+8
+         
+
 - wake_lock
 
         adb shell

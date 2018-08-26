@@ -60,6 +60,9 @@
             如果关键子带点，则要加\进行转义：
             grep "\.c"
 
+            //查找多个关键字
+            adb shell dmesg | grep -i 'healthd\|smb\|usb\|\[FG\]'
+
 	- locate
 
     		locate libc.a  #查找libc.a的位置
