@@ -33,6 +33,10 @@
         adb root
         adb shell dmesg > kmsg.txt
 
+        清空dmesg:
+        adb shell dmesg -c
+
+
         其他：
         dump_last_kmsg()
         #define LAST_KMSG_PATH          "/proc/last_kmsg"

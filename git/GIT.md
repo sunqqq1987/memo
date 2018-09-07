@@ -20,7 +20,7 @@
     4)查找commit信息中的含指定信息的提交
     git log --grep=charger
 
-    5)定制要显示的记录格式
+    5)定制要显示的记录格式(时间)
     $ git log --pretty=format:"%h - %ae, %ar : %s" --grep=charger --author=codeaurora.org
     a68ce5d - 12@codeaurora.com, 3 months ago : drivers: usb: enable floated charger
 
