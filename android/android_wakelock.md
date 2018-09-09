@@ -37,7 +37,7 @@ PowerManagerService: releaseWakeLockInternal: lock=242046348 [AudioMix], flags=0
 
 kernel 锁默认不会打印出来，一般是待机结束后通过节点来获取：
 
-adb shell? cat /sys/kernel/debug/wakeup_sources >? wakeup_sources.log
+adb shell cat /sys/kernel/debug/wakeup_sources > wakeup_sources.log
 
 active_count:对应wakeup source被激活的次数.
 event_count:被信号唤醒的次数?

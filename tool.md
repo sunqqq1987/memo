@@ -289,6 +289,7 @@
     ctrl+shift+M
 
     10)文件和修改处的跳转
+    
         在最近打开的文件间切换
         Navigate entire history:  Ctrl+Tab
 
@@ -313,17 +314,22 @@
         按住Shift+Alt后拖动鼠标
 
     12)查找
-        查找文件
+
+        查找文件:
         ctr+p 后输入部分文件名
+
+        在user settings文件中加入以下,可以將查找對話框在下方顯示:
+        "search.location": "panel",
 
     13)排除workspace下的某个folder中的特定目录 folder1
 
-    在settings.json中加入：
-    "files.exclude": {
-        "**/folder1": true
-      },
+        在settings.json中加入：
+        "files.exclude": {
+            "**/folder1": true
+        },
 
-   
+    14)命令行啓動vs code來編輯文件:
+        code <file>
     
 # 1 ATOM #
 

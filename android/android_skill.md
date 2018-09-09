@@ -55,7 +55,7 @@
     package:/system/app/com.qualcomm.qti.services.secureui/com.qualcomm.qti.services.secureui.apk=
             com.qualcomm.qti.services.secureui
 
-dex2oat
+    dex2oat
 
     https://blog.csdn.net/sumin_fushengruocha/article/details/51147776
     https://blog.csdn.net/roland_sun/article/details/50234551

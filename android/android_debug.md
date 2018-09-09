@@ -1,6 +1,4 @@
-# log #
-
-1) bugreport
+# bugreport #
 
     adb bugreport > br1.txt
     ==> 在当前目录下生成br1.txt以及对应的bugreport***.zip
@@ -19,16 +17,64 @@
     adb push /home/mobvoi/xxl/issues/crash_after_do_bugreport/test/* /data/misc/logd
     
 
-    系统属性
-    bugreport中：
-    SYSTEM PROPERTIES (getprop)
+- 系统属性
 
-2) dumpstate
+        bugreport中：
+        SYSTEM PROPERTIES (getprop)
+
+- 系统分区的情况
+
+        ------ FILESYSTEMS & FREE SPACE (df) ------
+        Filesystem                                             1K-blocks   Used Available Use% Mounted on
+        rootfs                                                    443408   3088    440320   1% /
+        tmpfs                                                     458816    668    458148   1% /dev
+        /dev/block/platform/soc/7824900.sdhci/by-name/system     1257344 639240    588616  53% /system
+        /dev/block/platform/soc/7824900.sdhci/by-name/vendor      261856 135116    118880  54% /vendor
+        tmpfs                                                     458816      0    458816   0% /mnt
+        /dev/block/mmcblk0p24                                      60400     56     59036   1% /cache
+        /dev/block/platform/soc/7824900.sdhci/by-name/modem       131008  52256     78752  40% /firmware
+        /dev/block/platform/soc/7824900.sdhci/by-name/oem          11760     44     11232   1% /oem
+        /dev/block/platform/soc/7824900.sdhci/by-name/userdata   1776480 464972   1295124  27% /data
+        /data/media                                              1776480 464972   1295124  27% /storage/emulated
+
+        ------ VOLD DUMP (vdc dump) ------
+        0 23661 Dumping loop status
+        0 23661 Dumping DM status
+        0 23661 Dumping mounted filesystems
+        0 23661 rootfs / rootfs ro,seclabel,size=443408k,nr_inodes=110852 0 0
+        0 23661 tmpfs /dev tmpfs rw,seclabel,nosuid,relatime,size=458816k,nr_inodes=114704,mode=755 0 0
+        0 23661 devpts /dev/pts devpts rw,seclabel,relatime,mode=600 0 0
+        0 23661 proc /proc proc rw,relatime,gid=3009,hidepid=2 0 0
+        0 23661 sysfs /sys sysfs rw,seclabel,relatime 0 0
+        0 23661 selinuxfs /sys/fs/selinux selinuxfs rw,relatime 0 0
+        0 23661 /dev/block/platform/soc/7824900.sdhci/by-name/system /system ext4 ro,seclabel,relatime,data=ordered 0 0
+        0 23661 /dev/block/platform/soc/7824900.sdhci/by-name/vendor /vendor ext4 ro,seclabel,relatime 0 0
+        0 23661 debugfs /sys/kernel/debug debugfs rw,seclabel,relatime 0 0
+        0 23661 none /acct cgroup rw,relatime,cpuacct 0 0
+        0 23661 tmpfs /mnt tmpfs rw,seclabel,relatime,size=458816k,nr_inodes=114704,mode=755,gid=1000 0 0
+        0 23661 none /config configfs rw,relatime 0 0
+        0 23661 none /dev/memcg cgroup rw,relatime,memory 0 0
+        0 23661 none /dev/cpuctl cgroup rw,relatime,cpu 0 0
+        0 23661 pstore /sys/fs/pstore pstore rw,seclabel,relatime 0 0
+        0 23661 /dev/block/platform/soc/7824900.sdhci/by-name/cache /cache ext4 rw,seclabel,nosuid,nodev,noatime,data=ordered 0 0
+        0 23661 /dev/block/platform/soc/7824900.sdhci/by-name/persist /persist ext4 rw,seclabel,nosuid,nodev,noatime,data=ordered 0 0
+        0 23661 /dev/block/platform/soc/7824900.sdhci/by-name/modem /firmware vfat ro,context=u:object_r:firmware_file:s0,relatime,uid=1000,gid=1000,fmask=0337,dmask=0227,codepage=437,iocharset=iso8859-1,shortname=lower,errors=remount-ro 0 0
+        0 23661 /dev/block/platform/soc/7824900.sdhci/by-name/oem /oem ext4 ro,context=u:object_r:oemfs:s0,nosuid,nodev,relatime,data=ordered 0 0
+        0 23661 tmpfs /storage tmpfs rw,seclabel,relatime,size=458816k,nr_inodes=114704,mode=755,gid=1000 0 0
+        0 23661 adb /dev/usb-ffs/adb functionfs rw,relatime 0 0
+        0 23661 /dev/block/platform/soc/7824900.sdhci/by-name/userdata /data ext4 rw,seclabel,nosuid,nodev,noatime,discard,noauto_da_alloc,data=ordered 0 0
+        0 23661 /data/media /mnt/runtime/default/emulated sdcardfs rw,nosuid,nodev,noexec,noatime,fsuid=1023,fsgid=1023,gid=1015,multiuser,mask=6,derive_gid 0 0
+        0 23661 /data/media /storage/emulated sdcardfs rw,nosuid,nodev,noexec,noatime,fsuid=1023,fsgid=1023,gid=1015,multiuser,mask=6,derive_gid 0 0
+        0 23661 /data/media /mnt/runtime/read/emulated sdcardfs rw,nosuid,nodev,noexec,noatime,fsuid=1023,fsgid=1023,gid=9997,multiuser,mask=23,derive_gid 0 0
+        0 23661 /data/media /mnt/runtime/write/emulated sdcardfs rw,nosuid,nodev,noexec,noatime,fsuid=1023,fsgid=1023,gid=9997,multiuser,mask=7,derive_gid 0 0
+
+
+# dumpstate #
 
     // Start the dumpstate service.
     property_set("ctl.start", "dumpstate");
 
-3) logcat
+# logcat #
 
     adb logcat -v time -s xxx yyy
     ==>按tag过滤出xxx或yyy的log
