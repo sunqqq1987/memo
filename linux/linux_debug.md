@@ -36,12 +36,26 @@
         清空dmesg:
         adb shell dmesg -c
 
-
         其他：
         dump_last_kmsg()
         #define LAST_KMSG_PATH          "/proc/last_kmsg"
         #define LAST_KMSG_PSTORE_PATH   "/sys/fs/pstore/console-ramoops"
         
+- 在后台抓kernel log
+
+        方法一
+        adb root
+        adb shell
+
+        # cat /proc/kmsg > /data/xxl_kmsg.log &
+
+        # 这种方法kernel log才不会断
+        logcat -b kernel > /data/xxl_kmsg.log &
+        exit
+
+        取log时，先adb shell,再sync,
+        最后adb pull /data/xxl_kmsg.log ./
+
 - 检查last kmsg是否有特定信息
 
         Fs_mgr_verity.cpp (system\core\fs_mgr)：

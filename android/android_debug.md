@@ -1,3 +1,9 @@
+# adb #
+
+    ubuntu上adb不能识别到手机：
+    lsusb后
+    加入到：/etc/udev/rules.d$ sudo vi 70-android.rules
+
 # bugreport #
 
     adb bugreport > br1.txt
