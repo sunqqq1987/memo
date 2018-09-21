@@ -671,6 +671,20 @@ git init命令把当前目录变成Git可以管理的仓库：
     git clone http://abc@qq.com:abc123456@git.xxx.com/www.git
 
 
+# repo 错误　＃
+
+    1) repo sync error： cannot initialize work tree
+
+    方法：
+    先用repo --trace sync -cdf将repo的所有动作详细输出：
+    : cd ......../vendor/mediatek/proprietary/hardware/gsm0710muxd
+    : git read-tree --reset -u -v HEAD 1>| 2>|
+    fatal: This operation must be run in a work tree
+
+    再.repo/projects下以及.repo/project-objects/下　删除上述的.git目录，再repo sync即可
+
+    参考：https://blog.csdn.net/ly890700/article/details/54848373
+
 # 参考 #
 
     1）廖雪峰
