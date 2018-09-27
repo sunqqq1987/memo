@@ -358,3 +358,9 @@
         区别二。[是shell命令，在它包围的表达式是它的命令行参数，所以串比较符>和<需要转义，否则就变成io重定向了。[[是shell关键字，不会做命令行扩展，所以<和>不需要进行转义。但是语法相对严格，如在[中可以用引号括起操作付，[[则不行。如if [ "-z" "ab" ]。
 
         区别三。[[可以做算术扩展，[则不行。如if [[ 11+1 -eq 100 ]]，而if [ 11+1 -eq 100 ]则会报错。
+
+- basename
+
+        basename命令用于去掉文件名的目录和后缀（strip directory and suffix from filenames），对应的dirname命令用于截取目录
+        
+        BOOTLOADER_EMMC    = $(shell basename $(TARGET_EMMC_BOOTLOADER))

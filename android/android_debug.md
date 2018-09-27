@@ -1,3 +1,7 @@
+# android mk中加log #
+
+    打印变量的方法是：$(warning  $(var))
+    
 # adb #
 
     ubuntu上adb不能识别到手机：
