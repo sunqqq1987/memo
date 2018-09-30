@@ -57,7 +57,8 @@
         遇到提示回车默认即可，公钥被存到用户目录下.ssh目录，比如root存放在：
         /root/.ssh/id_rsa.pub
 
-        将 .ssh 目录中的 id_rsa.pub 文件复制到 主机B 的 ~/.ssh/ 目录中，并改名为 authorized_keys.
+        将 .ssh 目录中的 id_rsa.pub 文件复制到 主机B 的 ~/.ssh/ 目录中，并改名为 authorized_keys:
+        scp -r ~/authorized_keys username@ip:/data/username/.ssh/
         这样用scp、ssh命令不需要密码来获取主机B的文件了
 
 - 使用国内源
@@ -78,6 +79,10 @@
 - ubuntu显示桌面
 
         Ctrl + Win + D：快速显示桌面 / 恢复屏幕显示
+
+- 窗口形式打开当前目录
+
+        运行命令：nautilus　．
         
 - 看图片
 

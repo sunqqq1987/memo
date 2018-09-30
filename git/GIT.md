@@ -77,14 +77,42 @@
     git log --pretty --stat . >~/xxl/study/charger/FG_commits.txt
 
     11) 打patch
+
+    方法1: 
+    https://blog.csdn.net/akb48fan710/article/details/73527767
+
+    git apply 可以应用使用git diff 和git format-patch生成的2种patch来打补丁.
+    使用git apply 命令之后patch文件中的修改会自动合入到对应的文件中,但是不会帮我们自动提交这个commit.
+
+    方法2:
     https://blog.csdn.net/liuhaomatou/article/details/54410361
 
+    git am 会直接使用patch文件中的diff的信息，还有提交者，时间等等来自动提交,不需要我们再去提交commit
+    git am 必须使用的是用git format-patch 生成的patch文件来打补丁,而不能是使用git diff生成的patch.
+    如果使用的是git diff生成的patch,会出现下面这个错误.
+    Patch format detection failed.
+
+
     git am 可以一次合并一个文件，或者一个目录下所有的patch
-    方法：
+    
     把生成的patch文件copy到一个文件夹中，然后:git am patch/*patch
     之后git log就看到有个commit了
 
+
     12）生成patch
+
+    Git diff 和 git format-patch的对比.
+
+    A.兼容性：很明显，git diff生成的Patch兼容性强。如果你在修改的代码的官方版本库不是Git管理的版本库，
+    那么你必须使用git diff生成的patch才能让你的代码被项目的维护人接受。
+
+    B.除错功能：对于git diff生成的patch，你可以用git apply --check 查看补丁是否能够干净顺利地应用到当前分支中；
+    如果git format-patch 生成的补丁不能打到当前分支，git am会给出提示，并协助你完成打补丁工作，
+    你也可以使用git am -3进行三方合并，详细的做法可以参考git手册或者《Progit》。从这一点上看，两者除错功能都很强。
+
+    C.版本库信息：由于git format-patch生成的补丁中含有这个补丁开发者的名字，
+    因此在应用补丁时，这个名字会被记录进版本库，显然，这样做是恰当的。因此，目前使用Git的开源社区往往建议大家使用format-patch生成补丁。
+
 
     把某次commit以后的（不包括该提交）都生成patch：
     git format-patch e795fefabc
@@ -93,7 +121,7 @@
     git format-patch –n 07fe  //n指patch数，07fe对应提交的名称
 
 
-    12)查看全部分支下的已经commit但没有push的:
+    13)查看全部分支下的已经commit但没有push的:
     
     git log --branches --not --remotes
 
