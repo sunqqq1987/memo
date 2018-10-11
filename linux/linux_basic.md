@@ -299,6 +299,16 @@
 		方法２：hexdump
 		apt-get install libdata-hexdumper-perl
 		安装好之后就可以直接hexdump your_binary_file
+
+        xxl@HP-Z228:~/Downloads/br2$ hexdump -Cv Untitled-4  //字节方式显示且不要省略
+        00000000  00 0a 32 0a 33 0a 35 30                           |..2.3.50|
+        00000008
+
+        hexdump -Cv testfile -s skip_bytes -n show_number_bytes //只显示某一段
+        xxl@HP-Z228:~/Downloads/br2$ hexdump -Cv Untitled-4 -s 1 -n 3
+        00000001  0a 32 0a                                          |.2.|
+        00000004
+
 		也可以直接使用hd命令来代替hexdump
 		如果想要慢慢看 ： hd your_binary_file | more
 
