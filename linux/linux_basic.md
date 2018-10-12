@@ -326,6 +326,13 @@
 		] + c  查找上一个不同点
 		[ + c  查找下一个不同点
 
+- 比较文件差异
+
+        两种方法
+        1) diff file1 file2
+
+        2) meld file1 file2
+
 # shell #
 
 - echo

@@ -27,6 +27,7 @@
         Current revision: refs/tags/android-8.1.0_r2
         Local Branches: 0
         ...
+
 - 更换远程分支
 
         cd ~/aosp

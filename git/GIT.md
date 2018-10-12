@@ -42,6 +42,9 @@
     如果想删除分支,则：
     git branch -d test1
 
+    重命名本地分支:
+    git branch -m old_local_branch_name new_local_branch_name
+
     7) 撤销本地分支的上一次commit
     git reset --hard HEAD^  //彻底回退工作区/暂存区/本地版本到当前版本库里的上一个版本（已经git commit到本地库）
     
@@ -119,31 +122,39 @@
 
     某次提交（包含）之前的几次提交，都生成patch：
     git format-patch –n 07fe  //n指patch数，07fe对应提交的名称
+    git format-patch -1 07fe //只获取07fe提交的patch
+
 
 
     13)查看全部分支下的已经commit但没有push的:
     
     git log --branches --not --remotes
 
+    14)commit msg后没有changeid
+    网上下载commit-msg, 拷贝到 .git/hooks/commit-msg
+
+    15) refs/for跟head的区别
+    refs/for/[brach] 需要经过code review之后才可以提交，
+    而refs/heads/[beanch]不需要code review。
 
  
 ## git diff ##
 
     (1) 三种比较方式
-    $ git diff              #比较工作树与 暂存区
+    $ git diff           #比较工作树与 暂存区
     $ git diff HEAD      #比较工作树与 当前分支中最后一次提交(HEAD)
     $ git diff --cached  #比较暂存区与 当前分支中最后一次提交(HEAD） 
     
      
     (2) 任意比较
     $ git diff test              #比较当前分支与 test分支
-    $ git diff HEAD -- ./test     #比较当前分支最后一次提交与 工作树中的test文件 
-    $ git diff HEAD^  HEAD     #比较当前分支的最后两次提交
+    $ git diff HEAD -- ./test    #比较当前分支最后一次提交与 工作树中的test文件 
+    $ git diff HEAD^  HEAD       #比较当前分支的最后两次提交
      
     (3) 比较分支
     $ git diff topic master     #比较topic和master分支的HEAD, 所以也可以使本地分支和远程分支的比较
-    $ git diff topic..master     #同1 
-    $ git diff topic...master     #从topic分支开始时起, 在master分支上发生的更改
+    $ git diff topic..master    #同1 
+    $ git diff topic...master   #从topic分支开始时起, 在master分支上发生的更改
      
     (4) 限制输出格式
     $ git diff --diff-filter=MRC             #只显示修改、重命名和复制, 但不能添加或删除。 
@@ -151,7 +162,7 @@
     $ git diff arch/i386 include/asm-i386     #将比较输出限制为子树 $ git diff –R 逆序输出差异
      
     (5) 查看当前分支中的两个commit id间的改动
-    git diff commit-id-1 commit-id-2  >> diff.txt      #将2个commit间的不同 输出到文件 
+    git diff commit-id-1 commit-id-2  >> diff.txt   #将2个commit间的不同 输出到文件 
     git diff commit-id-1 commit-id-2 -- readme.txt  #具体某个文件的commit间的变更
     
  
