@@ -95,3 +95,27 @@
         dlclose(p);
         
         参考：http://blog.csdn.net/hdhd588/article/details/6922202
+
+# selinux #
+
+- 解决avc deny
+
+    在 ubuntu中安装policycoreutils:
+    sudo apt-get install policycoreutils
+
+    1.手动插入到对应的te文件
+
+    1)提取所有的avc LOG. 如 adb shell “cat /proc/kmsg | grep avc” > avc_log.txt
+    2)使用 audit2allow tool 直接生成policy. audit2allow -i avc_log.txt 即可自动输出生成的policy
+
+
+    2.如果在ubuntu 14.04 或者更新的版本中，可以直接将策略语句插入到编译好的sepolicy中
+    命令如下：
+
+    adb shell su -c dmesg | audit2allow -p out/target/product/<device>/root/sepolicy
+
+
+- tmp
+
+    # dontaudit untrusted_app thermal-engine:unix_stream_socket connectto;
+    

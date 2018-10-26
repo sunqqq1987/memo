@@ -41,6 +41,11 @@
 			find ./ -mtime 0 -o -mtime 1 
 
 			另外， -mmin参数-cmin / - amin也是类似的。
+
+            
+            查找大小在某个范围内的文件使用-size参数，-size +n表示大于n单位的范围，-size –n表示小于n单位的范围。
+            将查出来的文件以详细列表形式显示出来:
+            find . -type f -mtime -1 -size +100M -size -2G | xargs ls –l
 			
 
 	- grep 内容查找
@@ -210,64 +215,6 @@
 		TMPDIR=/data/local/tmp
 		ANDROID_ASSETS=/system/app
 		BOOTCLASSPATH=/system/framework/core-oj.jar:...
-
-# 分区 #
-
-- **查看分区挂载情况** 
-
-		1）cat /fstab.* ，但这仅仅一部分分区的信息
-
-	    2）mount ，等价于cat /proc/mounts //显示mout分区的命令，从中知道分区的文件系统类型和对应的块设备
-
-			/dev/block/bootdevice/by-name/system on /system type ext4 (ro,seclabel,relatime,data=ordered)
-			/dev/block/bootdevice/by-name/userdata on /data type ext4 (rw,seclabel,relatime,nodelalloc,data=ordered)
-			/dev/block/bootdevice/by-name/cache on /cache type ext4 (rw,seclabel,nosuid,nodev,relatime,data=ordered)
-
-			
-			ll /dev/block/bootdevice/by-name //显示分区对应的真实块设备
-	    
-	    3）cat /proc/partitions //显示分区名，block数，设备号信息
-		
-			major minor  #blocks  name
-			
-			 179        0   30535680 mmcblk0
-			 179        1      86016 mmcblk0p1
-			 179        2          1 mmcblk0p2
-			 179        3          8 mmcblk0p3
-			 179        4        512 mmcblk0p4
-			 179        5        512 mmcblk0p5
-			 179        6        512 mmcblk0p6
-			 179        7        512 mmcblk0p7
-			 179        8       4096 mmcblk0p8
-			 179        9       4096 mmcblk0p9
-			 179       10       1024 mmcblk0p10
-
-		4）ls /dev/block //显示所有的块设备，类似cat /proc/partitions
-			
-			mmcblk0
-			mmcblk0p1
-			mmcblk0p10
-			mmcblk0p11
-			mmcblk0p12
-			mmcblk0p13
-
-- **重新挂载分区** 
-
-	    当往分区里adb push文件时出现 “Read-only file system” 时，可以用mount命令将要写入数据的分区以读写方式mount. 
-	    比如要mount 根目录所在的分区，可以运行：
-	    Adb shell mount -o rw,remount   /system   (注意rw,remount间没有空格)
-	    
-	    之后就可以adb push文件到根目录了。
-	    写入完成后记得还原为只读：
-	    adb shell mont –o ro,remount  /system
-	    
-	    mount data分区
-	    mount -t ext4 /dev/block/platform/13540000.dwmmc0/by-name/USERDATA  /data
-
-- dump分区
-
-		使用dd命令，从mmc设备mmcblk0中将gpt数据读取出来
-
 
 # VI命令 #
 

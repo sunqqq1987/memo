@@ -23,15 +23,17 @@
 - 抓开机log
 
 		adb shell cat /proc/last_kmsg >d:/temp/1.txt   //偶尔出现只有xbl log的情况
-		adb shell cat /proc/kmsg >d:/temp/1.txt  //只有kernel log, 在O之前是可以不断输出，但到了O之后不可以
-		adb shell dmesg >d:/temp/1.txt  //只有kernel log，但只能输出当前的kernel log, 然后退出
-		adb shell logcat -b kernel  //可以不断输出kernel log
 
         android 8.0后：
         adb shell cat /sys/fs/pstore/console-ramoops > last_kmsg.txt
 
+
+        adb shell cat /proc/kmsg >d:/temp/1.txt  //只有kernel log, 在O之前是可以不断输出，但到了O之后不可以
+
         adb root
-        adb shell dmesg > kmsg.txt
+		adb shell dmesg >d:/temp/1.txt  //只有kernel log，但只能输出当前的kernel log, 然后退出
+        
+		adb shell logcat -b kernel  //可以不断输出kernel log
 
         清空dmesg:
         adb shell dmesg -c
