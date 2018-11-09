@@ -715,7 +715,7 @@ git init命令把当前目录变成Git可以管理的仓库：
     1) repo sync error： cannot initialize work tree
 
     方法：
-    先用repo --trace sync -cdf将repo的所有动作详细输出：
+    先用 repo --trace sync -cdf 将repo的所有动作详细输出：
     : cd ......../vendor/mediatek/proprietary/hardware/gsm0710muxd
     : git read-tree --reset -u -v HEAD 1>| 2>|
     fatal: This operation must be run in a work tree

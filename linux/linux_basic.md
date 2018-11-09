@@ -328,3 +328,15 @@
         basename命令用于去掉文件名的目录和后缀（strip directory and suffix from filenames），对应的dirname命令用于截取目录
         
         BOOTLOADER_EMMC    = $(shell basename $(TARGET_EMMC_BOOTLOADER))
+
+- 截取字符串
+
+        https://blog.csdn.net/dong18292000671/article/details/74458006
+
+        1.从右边第几个字符开始，及字符的个数。
+        代码：${var:0-11:3}
+        其中的 0-11 表示右边算起第11个字符开始，3 表示截取的字符数。
+
+- 获取当前目录
+
+        base_path=$(cd `dirname $0`; pwd)

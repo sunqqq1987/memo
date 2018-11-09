@@ -876,89 +876,96 @@
 
 # 寄存器操作 #
 
-	1）对某位写1用 或1，写0用 与0
-	接口如：
-	static void XX_set_clk(char val)  
-	{  
-	    if(val)  
-	        GPGDAT |= (0x1<<7);  //第7位写1
-	    else  
-	        GPGDAT &= ~(0x1<<7);  //第7位写0
-	} 
+    1）对某位写1用 或1，写0用 与0
+    接口如：
+    static void XX_set_clk(char val)  
+    {  
+        if(val)  
+            GPGDAT |= (0x1<<7);  //第7位写1
+        else  
+            GPGDAT &= ~(0x1<<7);  //第7位写0
+    } 
 
 # 单工、半双工、双工的区别 #
 
-	1、单工 
-	单工就是指A只能发信号，而B只能接收信号，通信是单向的，
-	就象灯塔之于航船-灯塔发出光信号而航船只能接收信号以确保自己行驶在正确的航线上。 
-	
-	 2、半双工（Half Duplex） 
-	半双工就是指A能发信号给B，B也能发信号给A，但这两个过程不能同时进行。
-	最典型的例子就象我们在影视作品中看到的对讲机一样： 
-	007：呼叫总部，请求支援，OVER  
-	总部：收到，增援人员将在5分钟内赶到，OVER  
-	
-	3、全双工 （Full Duplex(双工)）
-	全双工比半双工又进了一步。在A给B发信号的同时，B也可以给A发信号。
-	典型的例子就是打电话。  
+    1、单工 
+    单工就是指A只能发信号，而B只能接收信号，通信是单向的，
+    就象灯塔之于航船-灯塔发出光信号而航船只能接收信号以确保自己行驶在正确的航线上。 
+
+        2、半双工（Half Duplex） 
+    半双工就是指A能发信号给B，B也能发信号给A，但这两个过程不能同时进行。
+    最典型的例子就象我们在影视作品中看到的对讲机一样： 
+    007：呼叫总部，请求支援，OVER  
+    总部：收到，增援人员将在5分钟内赶到，OVER  
+
+    3、全双工 （Full Duplex(双工)）
+    全双工比半双工又进了一步。在A给B发信号的同时，B也可以给A发信号。
+    典型的例子就是打电话。  
 
 # 术语
 
-	片选: CS#，其中#表示低电平有效
-	数据/命令引脚: D/C#
-	VCC: 电源正
-	VDD: 外部的输入电源
+    片选: CS#，其中#表示低电平有效
+    数据/命令引脚: D/C#
+    VCC: 电源正
+    VDD: 外部的输入电源
+
+    de-asserted:
+    在阅读芯片数据手册的时候经常会遇到asserted和deasserted这样的词汇。
+    asserted的意思就是把信号变为active（可以理解为有效），根据系统要求不同，该有效电平可以是高电平（即高有效），也可以是低电平（即低电平有效）
+
+    quiescent current: 
+    静态电流是指没有信号输入时的电流，也就是器件本身在不受外部因素影响下的本身消耗电流
 
 # PM #
 
-	QC的PON模块支持多个物理上的power-on源(KPDPWR_N, CBLPWR)和reset源(KPDPWR_N, RESIN, KPDPWR+RESIN),
-	PON这个外设通过SPMI接口连到host processor.
+    QC的PON模块支持多个物理上的power-on源(KPDPWR_N, CBLPWR)和reset源(KPDPWR_N, RESIN, KPDPWR+RESIN),
+    PON这个外设通过SPMI接口连到host processor.
 
 # Camera #
 
-	参考
-	https://blog.csdn.net/xubin341719/article/details/7727518
-	https://blog.csdn.net/xubin341719/article/details/7727041
+    参考
+    https://blog.csdn.net/xubin341719/article/details/7727518
+    https://blog.csdn.net/xubin341719/article/details/7727041
 
 - 摄像头主要参数
 
-		MCLK:  24MHz //主时钟，给摄像头提供时钟
-		RESET： 复位线
-		PWDN： 在摄像头工作时应该始终为低
-		PCLK:  48~52MHz //像素clock
-		电压: 1.8V(1.5V)、2.8V
-		SCL（IIC时钟）: 100KHz或者400KHz
-		D1-D7: 数据线
-		数据接口选择: ITU\MIPI等
-		
-			1）多种输入接口：
-			DMA (AXI 64-bitinterface) 模式
-			MIPI (CSI) 模式（移动行业处理器接口）
-			ITU-R BT 601/ 656/ 709模式， ITU:国际电信联盟无线电通信部门
-			Direct FIFO (PlayBack)模式
-	
-			2）多种输出模式：
-			DMA (AXI 64-bitinterface) 模式
-			Direct FIFO 模式
-	
-		图像数据格式: YVU\UVY之类
-		输出信号的极性： 就是PCLK、VSYNC(场同步信号）、HSYNC(行同步信号）这些信号的极性
-		HREF是行参考信号，与HSYNC一样吗？
+        MCLK:  24MHz //主时钟，给摄像头提供时钟
+        RESET： 复位线
+        PWDN： 在摄像头工作时应该始终为低
+        PCLK:  48~52MHz //像素clock
+        电压: 1.8V(1.5V)、2.8V
+        SCL（IIC时钟）: 100KHz或者400KHz
+        D1-D7: 数据线
+        数据接口选择: ITU\MIPI等
+
+            1）多种输入接口：
+            DMA (AXI 64-bitinterface) 模式
+            MIPI (CSI) 模式（移动行业处理器接口）
+            ITU-R BT 601/ 656/ 709模式， ITU:国际电信联盟无线电通信部门
+            Direct FIFO (PlayBack)模式
+
+            2）多种输出模式：
+            DMA (AXI 64-bitinterface) 模式
+            Direct FIFO 模式
+
+        图像数据格式: YVU\UVY之类
+        输出信号的极性： 就是PCLK、VSYNC(场同步信号）、HSYNC(行同步信号）这些信号的极性
+        HREF是行参考信号，与HSYNC一样吗？
 	
 	<img src="./pic/cam1.png" width= 500><br>
 
 # LCD #
 
-	1）RGB接口
-	
-	https://blog.csdn.net/xubin341719/article/details/9177085 
+    1）RGB接口
 
-	LCD TE这个pin脚定义为Tearing effect，主要起到数据同步作用。
-	将摄像头采集的模拟信号转为数字图像信号，host将数字图像信号传输至显示屏上，为了不出现图像撕裂（被分割成几块）的画面，引入了TE功能，将一帧图像可以完整的不被撕裂的传输到显示屏上。
-	
-	horizontal front porch (HFP) blanking period
-	horizontal back porch (HBP) blanking period
-	horizontal sync active (HSA) mode
-	
-	DSI escape clock
-	the default escape clock on most chipsets is 19.2 Mhz
+    https://blog.csdn.net/xubin341719/article/details/9177085 
+
+    LCD TE这个pin脚定义为Tearing effect，主要起到数据同步作用。
+    将摄像头采集的模拟信号转为数字图像信号，host将数字图像信号传输至显示屏上，为了不出现图像撕裂（被分割成几块）的画面，引入了TE功能，将一帧图像可以完整的不被撕裂的传输到显示屏上。
+
+    horizontal front porch (HFP) blanking period
+    horizontal back porch (HBP) blanking period
+    horizontal sync active (HSA) mode
+
+    DSI escape clock
+    the default escape clock on most chipsets is 19.2 Mhz

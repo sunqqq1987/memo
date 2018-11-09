@@ -233,6 +233,12 @@ http://www.runoob.com/python/python-reg-expressions.html
 
 		http://blog.jobbole.com/74844/
 
+
+- 在Python的string前面加上‘r’
+        
+        是为了告诉编译器这个string是个raw string，不要转意backslash '\' 。 
+        例如，\n 在raw string中，是两个字符，\和n， 而不会转意为换行符。
+
 # Anaconda #
 
 

@@ -257,6 +257,10 @@
 
             参考：https://blog.csdn.net/huo108/article/details/80100952
 
+- 恢复删除文件
+
+        sudo extundelete /dev/sda2 --after 1539100800 --restore-all --output-dir /media/mobvoi/disk1t/resotred
+        
 # Geany
 
    类似windows的notepad++
